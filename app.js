@@ -1077,6 +1077,123 @@
     });
   }
 
+  // 2b. Deliver a Dream to Me (Step 3: Unique Personalized Dream Generator)
+  function setupCustomDreamDelivery() {
+    const form = document.getElementById('customDreamForm');
+    const nameInput = document.getElementById('dreamRecipientName');
+    const foldingLoader = document.getElementById('boatFoldingLoader');
+    const resultCard = document.getElementById('customDreamResult');
+    const resultText = document.getElementById('dreamResultText');
+    const copyBtn = document.getElementById('copyDreamBtn');
+    const deliverAgainBtn = document.getElementById('deliverAgainBtn');
+    const copyToast = document.getElementById('copySuccessToast');
+
+    if (!form || !nameInput || !resultCard) return;
+
+    const vehiclesAndAdventures = [
+      "ride a toasted marshmallow whale over a warm pancake sea",
+      "drift in an acorn sailboat across a river of melted starlight",
+      "float in a teacup balloon past strawberry milk clouds",
+      "leap across floating sponge cakes to high-five the smiling moon",
+      "sail a glowing origami swan through slumbering lavender valleys",
+      "curl up in a dandelion hammock while friendly comets whisper lullabies",
+      "dance with luminescent jellyfish under a velvet midnight aurora",
+      "glide on caramel ice skates across a pond of peppermint tea",
+      "hop on sleepy bumblebees to harvest spun-sugar stardust",
+      "explore an underwater library of glowing bedtime stories with cozy seals"
+    ];
+
+    const warmClosings = [
+      "guided by Lumo's gentle belly nightlight.",
+      "tucked safely under a quilt of velvet stardust.",
+      "while peaceful wind chimes sing you to sleep.",
+      "with sweet dreams nestled softly against your pillow.",
+      "wrapped in warm lullabies and happy morning hopes."
+    ];
+
+    let currentDreamText = "";
+
+    function generateDream(rawName) {
+      let cleanName = rawName.replace(/[<>'"`/\\&]/g, '').trim().slice(0, 20);
+      if (!cleanName) cleanName = "Sweet Dreamer";
+
+      const adventure = vehiclesAndAdventures[Math.floor(Math.random() * vehiclesAndAdventures.length)];
+      const closing = warmClosings[Math.floor(Math.random() * warmClosings.length)];
+
+      currentDreamText = `${cleanName}, tonight you ${adventure}, ${closing} Sleep tight! 🌙✨`;
+
+      // Animate boat folding for 750ms
+      foldingLoader.style.display = 'flex';
+      resultCard.style.display = 'none';
+      if (copyToast) copyToast.style.display = 'none';
+
+      AudioEngine.playChime(659.25);
+
+      setTimeout(() => {
+        foldingLoader.style.display = 'none';
+        resultCard.style.display = 'block';
+
+        resultText.innerHTML = `<span class="recipient-highlight">${cleanName}</span>, tonight you ${adventure}, ${closing} Sleep tight! 🌙✨`;
+
+        AudioEngine.playTownArrival();
+        incrementOdometer();
+      }, 750);
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      AudioEngine.playClick();
+      generateDream(nameInput.value);
+    });
+
+    if (deliverAgainBtn) {
+      deliverAgainBtn.addEventListener('click', () => {
+        AudioEngine.playClick();
+        generateDream(nameInput.value || "Dreamer");
+      });
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        AudioEngine.playClick();
+        if (!currentDreamText) return;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(currentDreamText).then(() => {
+            showCopyToast();
+          }).catch(() => fallbackCopy(currentDreamText));
+        } else {
+          fallbackCopy(currentDreamText);
+        }
+      });
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showCopyToast();
+      } catch (err) {
+        console.warn('Copy fallback failed', err);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showCopyToast() {
+      if (!copyToast) return;
+      copyToast.style.display = 'block';
+      AudioEngine.playChime(1046.5);
+      setTimeout(() => {
+        copyToast.style.display = 'none';
+      }, 2400);
+    }
+  }
+
   // 3. Responsive Chaos Mode Live Badge & Dynamic Observer (+5)
   function setupResponsiveChaosMode() {
     const screenDimensions = document.getElementById('screenDimensions');
@@ -1218,6 +1335,7 @@
     setupDreamWorkshop();
     setupEasterEggs();
     setupOdometer();
+    setupCustomDreamDelivery();
     setupGuestbook();
     setupResponsiveChaosMode();
     setupSparkleTrail();

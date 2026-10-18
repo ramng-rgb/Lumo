@@ -585,7 +585,7 @@
                 </div>
                 <div class="parcel-content">
                   <h3 class="parcel-name">The Flying Pancake Dream</h3>
-                  <p class="parcel-pitch">Warm, fluffy flapjacks drifting across starlit skies with golden syrup butter clouds.</p>
+                  <p class="parcel-pitch">Warm flapjacks drifting across starlit skies with golden syrup clouds.</p>
                   <button class="open-parcel-btn" aria-expanded="false" aria-controls="modal-pancake">
                     <span>Unseal Parcel</span> ✦
                   </button>
@@ -615,7 +615,7 @@
                 </div>
                 <div class="parcel-content">
                   <h3 class="parcel-name">The Marshmallow Piano Dream</h3>
-                  <p class="parcel-pitch">Squishy pastel musical keys that bounce softly and chime lullaby chords in your sleep.</p>
+                  <p class="parcel-pitch">Squishy pastel musical keys that bounce and chime lullaby chords.</p>
                   <button class="open-parcel-btn" aria-expanded="false" aria-controls="dreamModal">
                     <span>Play Piano</span> ✦
                   </button>
@@ -630,7 +630,7 @@
                 </div>
                 <div class="parcel-content">
                   <h3 class="parcel-name">The Cloud Trampoline Dream</h3>
-                  <p class="parcel-pitch">Springy puff clouds that bounce you high enough to high-five the moon and catch stars.</p>
+                  <p class="parcel-pitch">Springy puff clouds that bounce you high enough to catch stars.</p>
                   <button class="open-parcel-btn" aria-expanded="false" aria-controls="dreamModal">
                     <span>Unseal Parcel</span> ✦
                   </button>
@@ -862,7 +862,7 @@
       <div class="container footer-container">
         <!-- Hit Counter Odometer (Side Quest +1) -->
         <div class="odometer-panel" aria-label="Dreams Delivered Hit Counter">
-          <div class="odometer-label">DREAMS DELIVERED WORLDWIDE:</div>
+          <div class="odometer-label">DREAMS DELIVERED:</div>
           <div class="odometer-display" id="odometer">
             <span class="digit-box" data-digit="0">0</span>
             <span class="digit-box" data-digit="0">0</span>
@@ -872,25 +872,66 @@
             <span class="digit-box" data-digit="0">0</span>
             <span class="digit-box" data-digit="4">4</span>
           </div>
-          <div class="odometer-subtext">Each visit wraps a new dream in ribbon and gold foil.</div>
+          <div class="odometer-subtext">Wrapped in stardust.</div>
+        </div>
+
+        <!-- Deliver a Dream to Me Interactive Module (Step 3) -->
+        <div class="custom-dream-card" id="customDreamModule" role="region" aria-label="Deliver a Dream to Me">
+          <div class="custom-dream-header">
+            <h3 class="custom-dream-title">Deliver a Dream to Me</h3>
+            <p class="custom-dream-sub">Type your name for custom bedtime dream origami:</p>
+          </div>
+          <form id="customDreamForm" class="custom-dream-form" onsubmit="event.preventDefault();">
+            <div class="input-boat-row">
+              <input type="text" id="dreamRecipientName" maxlength="20" placeholder="Your name (e.g. Maya)" required aria-label="Recipient name for dream">
+              <button type="submit" class="retro-btn primary" id="packDreamBtn">
+                <span>Pack My Dream ⛵</span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Animated Folding Paper Boat Loader -->
+          <div class="boat-folding-loader" id="boatFoldingLoader" aria-hidden="true" style="display: none;">
+            <svg viewBox="0 0 100 60" class="folding-boat-svg">
+              <polygon points="10,40 90,40 75,54 25,54" fill="#fff7ee" stroke="#2a2a5e" stroke-width="2"/>
+              <polygon points="50,15 50,40 75,40" fill="#ffd36b" stroke="#e5b43b" stroke-width="1.5"/>
+              <polygon points="35,40 50,40 50,24" fill="#ffc2d4"/>
+            </svg>
+            <div class="folding-text">Folding paper boat... ✨</div>
+          </div>
+
+          <!-- Resulting Whimsical Dream Parcel -->
+          <div class="custom-dream-result" id="customDreamResult" style="display: none;" role="region" aria-live="polite">
+            <div class="dream-result-seal" aria-hidden="true">★ LUMO'S WAX SEAL ★</div>
+            <p class="dream-result-quote" id="dreamResultText"></p>
+            <div class="dream-result-actions">
+              <button type="button" class="retro-btn secondary" id="copyDreamBtn" aria-label="Copy dream text">
+                <span>Copy Dream 📋</span>
+              </button>
+              <button type="button" class="retro-btn primary" id="deliverAgainBtn" aria-label="Generate another dream">
+                <span>Deliver Again ✦</span>
+              </button>
+            </div>
+            <div class="copy-success-toast" id="copySuccessToast" style="display: none;" role="status">Copied to starlight clipboard! ✨</div>
+          </div>
         </div>
 
         <!-- Live Interactive Guestbook Wall (Side Quest +2) -->
         <div class="guestbook-module" id="guestbookSection">
           <div class="guestbook-header">
-            <h3 id="footer-title" class="module-title">Lumo's Dream Wish Guestbook</h3>
-            <p class="module-subtitle">Leave a gentle bedtime wish or sweet note for the baby moon-cloud. (Max 140 chars)</p>
+            <h3 id="footer-title" class="module-title">Dream Wish Guestbook</h3>
+            <p class="module-subtitle">Leave a sweet bedtime wish:</p>
           </div>
 
           <!-- Guestbook Input Form -->
           <form id="guestbookForm" class="guestbook-form" aria-label="Sign Lumo's Guestbook">
             <div class="form-inputs">
-              <input type="text" id="signerName" placeholder="Your name (e.g. Star-Gazer Maya)" maxlength="30" required aria-label="Your nickname">
+              <input type="text" id="signerName" placeholder="Your name (e.g. Maya)" maxlength="30" required aria-label="Your nickname">
               <input type="text" id="signerWish" placeholder="Your dream wish for tonight..." maxlength="140" required aria-label="Your dream wish">
             </div>
             <div class="form-actions">
               <span class="char-count" id="charCount">140 chars left</span>
-              <button type="submit" class="retro-btn primary">Pin Note to Cloud 📌</button>
+              <button type="submit" class="retro-btn primary">Pin Wish 📌</button>
             </div>
           </form>
 
@@ -902,10 +943,10 @@
 
         <!-- Early-Web Webring Bar & Nostalgic Badges -->
         <div class="webring-panel" aria-label="Early-Web Webring Navigation">
-          <div class="webring-title">✦ THE DREAMLAND WEBRING ✦</div>
+          <div class="webring-title">✦ DREAMLAND WEBRING ✦</div>
           <div class="webring-links">
             <button class="webring-btn" id="webringPrev" aria-label="Previous site in Dreamland Webring">« Prev Star</button>
-            <span class="webring-badge">HUB: Baby Web Ring #402</span>
+            <span class="webring-badge">Ring #402</span>
             <button class="webring-btn" id="webringRandom" aria-label="Random dream section in Dreamland">✦ Random Dream ✦</button>
             <button class="webring-btn" id="webringNext" aria-label="Next site in Dreamland Webring">Next Star »</button>
           </div>
@@ -913,23 +954,20 @@
 
         <!-- Early-Web Fun Badges Row -->
         <div class="retro-badges-strip" aria-label="Retro homepage stickers">
-          <span class="retro-sticker">BEST VIEWED ON ANY DEVICE 📱💻</span>
-          <span class="retro-sticker cute-under-construction">🚧 UNDER COZY CONSTRUCTION 🚧</span>
-          <span class="retro-sticker">MADE WITH ♥ AT 3AM</span>
-          <span class="retro-sticker">POWERED BY STARDUST</span>
+          <span class="retro-sticker">POWERED BY STARDUST 🌙</span>
         </div>
 
         <!-- Visible Credits Section (Hard Requirement) -->
         <div class="credits-box" id="credits">
           <h4 class="credits-title">Honest Credits</h4>
           <ul class="credits-list">
-            <li><strong>Character:</strong> Lumo the Baby Moon-Cloud (100% original creation).</li>
+            <li><strong>Character:</strong> Original Baby Moon-Cloud.</li>
             <li><strong>Fonts:</strong> Fredoka, Nunito, VT323 (Google Fonts).</li>
-            <li><strong>Motion:</strong> GSAP 3.12.5 & ScrollTrigger via cdnjs.</li>
-            <li><strong>Audio:</strong> In-browser Web Audio API oscillators (zero external sound files).</li>
-            <li><strong>Art:</strong> Original hand-coded SVGs & CSS by Antigravity.</li>
+            <li><strong>Motion:</strong> GSAP 3.12.5 & ScrollTrigger.</li>
+            <li><strong>Audio:</strong> Web Audio synthesis (zero files).</li>
+            <li><strong>Art:</strong> Handcrafted SVGs & CSS.</li>
           </ul>
-          <p class="copyright-notice">© 2026 Lumo's Dream Delivery Service. Crafted with Antigravity & Claude. Sleep tight! 🌙</p>
+          <p class="copyright-notice">© 2026 Lumo's Dream Delivery. Built with Antigravity & Claude. Sleep tight! 🌙</p>
         </div>
       </div>
     </footer>
