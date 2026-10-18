@@ -147,6 +147,38 @@
       });
     },
 
+    playPianoNote(freq = 523.25) {
+      if (state.audioMuted || !state.audioContext) return;
+      this.init();
+      const ctx = state.audioContext;
+      const now = ctx.currentTime;
+
+      // Squishy marshmallow marimba chime: warm sine fundamental + gentle triangle harmonic
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, now);
+      osc1.frequency.exponentialRampToValueAtTime(freq * 0.985, now + 0.35);
+
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 2, now);
+
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.24, now + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + 0.7);
+      osc2.stop(now + 0.7);
+    },
+
     playTownArrival() {
       if (state.audioMuted || !state.audioContext) return;
       // Dreamy town arrival chord: C6, E6, G6
@@ -681,7 +713,7 @@
   }
 
   /* ==========================================================================
-     7. DREAM WORKSHOP: 3 PROJECTS & ACCESSIBLE MODAL
+     7. DREAM WORKSHOP: 4 PROJECTS, ANIMATED SCENES & MARSHMALLOW PIANO (Step 4)
      ========================================================================== */
   function setupDreamWorkshop() {
     const dreamModal = document.getElementById('dreamModal');
@@ -689,109 +721,283 @@
     const modalLine1 = document.getElementById('modalLine1');
     const modalLine2 = document.getElementById('modalLine2');
     const modalSvgStage = document.getElementById('modalSvgStage');
+    const modalInteractiveArea = document.getElementById('modalInteractiveArea');
     const closeModalBtn = document.getElementById('closeModalBtn');
-    const packDreamBtn = document.getElementById('packDreamBtn');
+    const modalPackBtn = document.getElementById('modalPackBtn');
+
+    let currentOpenProject = null;
+    let lastActiveTrigger = null;
+
+    // 8 Squishy Marshmallow Piano Keys (Pentatonic Scale across Octaves)
+    const pianoNotes = [
+      { key: 'a', note: 'C', freq: 523.25, bg: '#ffc2d4', label: 'Do' },
+      { key: 's', note: 'D', freq: 587.33, bg: '#fed0bb', label: 'Re' },
+      { key: 'd', note: 'E', freq: 659.25, bg: '#ffd36b', label: 'Mi' },
+      { key: 'f', note: 'G', freq: 783.99, bg: '#bfeedd', label: 'Sol' },
+      { key: 'g', note: 'A', freq: 880.00, bg: '#d9c8ff', label: 'La' },
+      { key: 'h', note: 'C', freq: 1046.50, bg: '#ffc2d4', label: 'Do²' },
+      { key: 'j', note: 'D', freq: 1174.66, bg: '#ffe39a', label: 'Re²' },
+      { key: 'k', note: 'E', freq: 1318.51, bg: '#bfeedd', label: 'Mi²' }
+    ];
 
     const dreamProjects = {
       pancake: {
         title: "The Flying Pancake Dream",
-        line1: "Fluffy, golden flapjacks drifting across starlit skies with whipped stardust butter.",
+        line1: "Fluffy golden flapjacks drifting across starlit skies with warm syrup clouds.",
         line2: "Sweet maple rain drizzles softly over sleepy rooftops while hungry dreamers smile.",
-        svg: `<svg viewBox="0 0 200 150" style="width:100%;max-width:200px;">
-                <ellipse cx="100" cy="110" rx="60" ry="20" fill="#d99543"/>
-                <ellipse cx="100" cy="95" rx="55" ry="18" fill="#e8a855"/>
-                <ellipse cx="100" cy="80" rx="50" ry="16" fill="#f7c06d"/>
-                <rect x="90" y="65" width="20" height="12" rx="3" fill="#ffe39a"/>
-                <path d="M 98 77 Q 95 90 92 105" stroke="#ffe39a" stroke-width="3" fill="none"/>
-                <circle cx="50" cy="40" r="3" fill="#ffd36b"/>
-                <circle cx="150" cy="35" r="4" fill="#ffd36b"/>
-                <text x="100" y="142" text-anchor="middle" fill="#ffe39a" font-family="VT323" font-size="16">100% FLUFFY DREAMS</text>
-              </svg>`
+        svg: `<svg viewBox="0 0 240 160" class="looping-parcel-svg pancake-scene">
+                <defs>
+                  <linearGradient id="syrupGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ffd36b"/>
+                    <stop offset="100%" stop-color="#d9822b"/>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="120" cy="132" rx="90" ry="20" fill="#ffd36b" opacity="0.2" class="pancake-shadow"/>
+                <g class="pancake-stack-group">
+                  <ellipse cx="120" cy="115" rx="72" ry="22" fill="#c77826" stroke="#87470f" stroke-width="1.5"/>
+                  <ellipse cx="120" cy="110" rx="72" ry="20" fill="#e09438"/>
+                  <ellipse cx="120" cy="98" rx="68" ry="20" fill="#c77826" stroke="#87470f" stroke-width="1.5"/>
+                  <ellipse cx="120" cy="93" rx="68" ry="19" fill="#f0ab4d"/>
+                  <ellipse cx="120" cy="80" rx="64" ry="19" fill="#d48328" stroke="#87470f" stroke-width="1.5"/>
+                  <ellipse cx="120" cy="76" rx="64" ry="18" fill="#f7bf63"/>
+                  <polygon points="108,60 128,54 136,66 116,72" fill="#ffe39a" stroke="#ffd36b" stroke-width="1.5"/>
+                  <path d="M 120 70 Q 124 88 122 102 Q 118 112 124 118" stroke="url(#syrupGrad)" stroke-width="5" stroke-linecap="round" fill="none"/>
+                  <circle cx="124" cy="126" r="3.5" fill="#d9822b" class="syrup-drop-fall"/>
+                </g>
+                <path d="M 95 50 Q 88 35 98 22" stroke="#fff7ee" stroke-width="2" stroke-linecap="round" fill="none" class="steam-wisp-1"/>
+                <path d="M 140 48 Q 148 32 138 18" stroke="#fff7ee" stroke-width="2" stroke-linecap="round" fill="none" class="steam-wisp-2"/>
+                <text x="120" y="152" text-anchor="middle" fill="#ffe39a" font-family="VT323" font-size="16">DRIFTING IN FLUFFY SYRUP SKIES</text>
+              </svg>`,
+        interactive: false
       },
       library: {
         title: "The Underwater Library Dream",
-        line1: "Luminescent jellyfish floating between spiraling coral shelves in quiet ocean depths.",
+        line1: "Luminescent jellyfish floating between coral shelves holding bedtime storybooks.",
         line2: "Waterproof bedtime books softly read themselves aloud in gentle underwater bubbles.",
-        svg: `<svg viewBox="0 0 200 150" style="width:100%;max-width:200px;">
-                <path d="M 70 60 C 70 30, 130 30, 130 60 Z" fill="#bfeedd" opacity="0.85"/>
-                <path d="M 80 60 Q 75 90 85 115 M 100 60 Q 105 95 100 120 M 120 60 Q 125 90 115 115" stroke="#bfeedd" stroke-width="2" fill="none"/>
-                <!-- Open book floating -->
-                <polygon points="80,95 100,105 120,95 100,85" fill="#fff7ee"/>
-                <circle cx="45" cy="50" r="6" fill="none" stroke="#bfeedd" stroke-width="1.5"/>
-                <circle cx="160" cy="70" r="8" fill="none" stroke="#bfeedd" stroke-width="1.5"/>
-                <text x="100" y="142" text-anchor="middle" fill="#bfeedd" font-family="VT323" font-size="16">CORAL ARCHIVES</text>
-              </svg>`
+        svg: `<svg viewBox="0 0 240 160" class="looping-parcel-svg jellyfish-scene">
+                <ellipse cx="120" cy="138" rx="85" ry="18" fill="#bfeedd" opacity="0.15"/>
+                <circle cx="50" cy="120" r="4" fill="none" stroke="#bfeedd" stroke-width="1.5" class="bubble-float b1"/>
+                <circle cx="70" cy="90" r="6" fill="none" stroke="#bfeedd" stroke-width="1.5" class="bubble-float b2"/>
+                <circle cx="180" cy="110" r="5" fill="none" stroke="#bfeedd" stroke-width="1.5" class="bubble-float b3"/>
+                <circle cx="195" cy="70" r="3.5" fill="none" stroke="#bfeedd" stroke-width="1.5" class="bubble-float b4"/>
+                <g class="floating-book-group">
+                  <polygon points="75,115 105,125 135,115 105,105" fill="#1b1c3e" stroke="#bfeedd" stroke-width="1.5"/>
+                  <path d="M 75 115 Q 105 122 135 115" stroke="#ffe39a" stroke-width="2" fill="none"/>
+                  <text x="105" y="118" text-anchor="middle" font-size="8" fill="#ffe39a">📖</text>
+                </g>
+                <g class="jellyfish-body-group">
+                  <path d="M 85 62 C 85 24, 155 24, 155 62 C 145 66, 130 64, 120 66 C 110 64, 95 66, 85 62 Z" fill="#bfeedd" opacity="0.85" stroke="#fff7ee" stroke-width="1.5"/>
+                  <ellipse cx="120" cy="46" rx="16" ry="10" fill="#ffffff" opacity="0.4"/>
+                  <circle cx="112" cy="48" r="2" fill="#2a1e3b"/>
+                  <circle cx="128" cy="48" r="2" fill="#2a1e3b"/>
+                  <ellipse cx="106" cy="52" rx="3" ry="1.5" fill="#ffc2d4"/>
+                  <ellipse cx="134" cy="52" rx="3" ry="1.5" fill="#ffc2d4"/>
+                  <path d="M 117 54 Q 120 57 123 54" stroke="#2a1e3b" stroke-width="1.5" fill="none"/>
+                  <path d="M 95 64 Q 90 85 98 108" stroke="#bfeedd" stroke-width="2" stroke-linecap="round" fill="none" class="tentacle t1"/>
+                  <path d="M 108 66 Q 115 88 108 112" stroke="#ffe39a" stroke-width="2" stroke-linecap="round" fill="none" class="tentacle t2"/>
+                  <path d="M 120 66 Q 126 90 120 115" stroke="#bfeedd" stroke-width="2.5" stroke-linecap="round" fill="none" class="tentacle t3"/>
+                  <path d="M 132 66 Q 125 88 132 112" stroke="#ffc2d4" stroke-width="2" stroke-linecap="round" fill="none" class="tentacle t4"/>
+                  <path d="M 145 64 Q 150 85 142 108" stroke="#bfeedd" stroke-width="2" stroke-linecap="round" fill="none" class="tentacle t5"/>
+                </g>
+                <text x="120" y="152" text-anchor="middle" fill="#bfeedd" font-family="VT323" font-size="16">CORAL ARCHIVES & LULLABY TALES</text>
+              </svg>`,
+        interactive: false
       },
       piano: {
         title: "The Marshmallow Piano Dream",
-        line1: "Squishy pastel musical keys that chime sweet lullabies with every soft bounce.",
-        line2: "No wrong notes exist here—every hop plays harmony, drifting you into gentle slumber.",
-        svg: `<svg viewBox="0 0 200 150" style="width:100%;max-width:200px;">
-                <rect x="30" y="60" width="24" height="60" rx="6" fill="#ffc2d4"/>
-                <rect x="58" y="60" width="24" height="60" rx="6" fill="#fff7ee"/>
-                <rect x="86" y="60" width="24" height="60" rx="6" fill="#ffe39a"/>
-                <rect x="114" y="60" width="24" height="60" rx="6" fill="#bfeedd"/>
-                <rect x="142" y="60" width="24" height="60" rx="6" fill="#ffc2d4"/>
-                <text x="60" y="45" fill="#ffd36b" font-size="20">♪</text>
-                <text x="120" y="40" fill="#ffc2d4" font-size="22">♫</text>
-                <text x="100" y="142" text-anchor="middle" fill="#ffc2d4" font-family="VT323" font-size="16">SQUISHY ACCORD</text>
-              </svg>`
+        line1: "8 squishy pastel keys that bounce softly and chime pure pentatonic lullabies.",
+        line2: "No wrong notes exist—every gentle hop plays harmony. Drift into sweet slumber.",
+        svg: `<svg viewBox="0 0 200 120" style="width:100%;max-width:200px;">
+                <ellipse cx="100" cy="100" rx="80" ry="16" fill="#ffd36b" opacity="0.25"/>
+                <!-- Cute jumping marshmallow with musical notes -->
+                <ellipse cx="100" cy="55" rx="36" ry="26" fill="#fff7ee" stroke="#ffd36b" stroke-width="2"/>
+                <circle cx="92" cy="52" r="3" fill="#2a1e3b"/>
+                <circle cx="108" cy="52" r="3" fill="#2a1e3b"/>
+                <ellipse cx="85" cy="57" rx="5" ry="3" fill="#ffc2d4"/>
+                <ellipse cx="115" cy="57" rx="5" ry="3" fill="#ffc2d4"/>
+                <path d="M 96 60 Q 100 64 104 60" stroke="#2a1e3b" stroke-width="2" fill="none"/>
+                <!-- Music notes -->
+                <text x="50" y="38" fill="#ffd36b" font-size="22">♪</text>
+                <text x="145" y="35" fill="#ffc2d4" font-size="24">♫</text>
+                <text x="100" y="112" text-anchor="middle" fill="#ffc2d4" font-family="VT323" font-size="16">SQUISHY PENTATONIC HARMONY</text>
+              </svg>`,
+        interactive: true
       },
       trampoline: {
         title: "The Cloud Trampoline Dream",
-        line1: "Springy puff clouds that bounce you high enough to high-five the moon and catch falling stars.",
+        line1: "Springy puff clouds that bounce you high enough to catch falling stars.",
         line2: "No gravity, only gentle giggles as you land softly on a feather mattress in the sky.",
-        svg: `<svg viewBox="0 0 200 150" style="width:100%;max-width:200px;">
+        svg: `<svg viewBox="0 0 200 140" style="width:100%;max-width:200px;">
                 <ellipse cx="100" cy="110" rx="65" ry="22" fill="#fff7ee" stroke="#ffd36b" stroke-width="2"/>
                 <ellipse cx="100" cy="108" rx="45" ry="14" fill="#ffc2d4" opacity="0.6"/>
                 <polygon points="100,45 106,60 122,60 109,70 114,85 100,75 86,85 91,70 78,60 94,60" fill="#ffd36b"/>
                 <circle cx="96" cy="62" r="1.5" fill="#3b1f4a"/>
                 <circle cx="104" cy="62" r="1.5" fill="#3b1f4a"/>
                 <path d="M 85 95 Q 100 105 115 95" stroke="#ffe39a" stroke-width="2.5" fill="none"/>
-                <text x="100" y="142" text-anchor="middle" fill="#ffe39a" font-family="VT323" font-size="16">MOON BOUNCE</text>
-              </svg>`
+                <text x="100" y="132" text-anchor="middle" fill="#ffe39a" font-family="VT323" font-size="16">MOON BOUNCE</text>
+              </svg>`,
+        interactive: false
       }
     };
 
+    function triggerPianoKey(keyChar) {
+      const target = document.querySelector(`.marshmallow-key[data-key="${keyChar.toLowerCase()}"]`);
+      if (!target) return;
+      const freq = parseFloat(target.getAttribute('data-freq')) || 523.25;
+      AudioEngine.playPianoNote(freq);
+      target.classList.add('squished');
+      setTimeout(() => target.classList.remove('squished'), 140);
+    }
+
+    function buildPianoHtml() {
+      let keysHtml = pianoNotes.map(n => `
+        <button type="button" class="marshmallow-key" data-key="${n.key}" data-freq="${n.freq}" style="--key-bg:${n.bg}" aria-label="Key ${n.key.toUpperCase()}, ${n.note}">
+          <span class="key-letter">${n.key.toUpperCase()}</span>
+          <span class="key-note">${n.note}</span>
+        </button>
+      `).join('');
+
+      return `
+        <div class="marshmallow-piano-wrapper" role="region" aria-label="Playable Marshmallow Piano">
+          <div class="piano-hint-pill">🎹 Tap keys or press [A S D F G H J K] to play lullabies:</div>
+          <div class="piano-keyboard" role="group" aria-label="8 Marshmallow Keys">
+            ${keysHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    function bindPianoKeys() {
+      if (!modalInteractiveArea) return;
+      const keys = modalInteractiveArea.querySelectorAll('.marshmallow-key');
+      keys.forEach(keyEl => {
+        const play = () => {
+          const freq = parseFloat(keyEl.getAttribute('data-freq')) || 523.25;
+          AudioEngine.playPianoNote(freq);
+          keyEl.classList.add('squished');
+          setTimeout(() => keyEl.classList.remove('squished'), 140);
+        };
+        keyEl.addEventListener('click', play);
+        keyEl.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          play();
+        }, { passive: false });
+      });
+    }
+
+    // Keyboard listener for piano (active only when piano modal is open)
+    window.addEventListener('keydown', (e) => {
+      if (!dreamModal.open) return;
+
+      // Escape to close
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+
+      // Focus trap within modal
+      if (e.key === 'Tab') {
+        const focusables = dreamModal.querySelectorAll('button:not([disabled]), [tabindex="0"], input, [href]');
+        if (focusables.length > 0) {
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
+      }
+
+      // Playable keys
+      if (currentOpenProject === 'piano') {
+        const validKeys = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k'];
+        const pressed = e.key.toLowerCase();
+        if (validKeys.includes(pressed)) {
+          e.preventDefault();
+          triggerPianoKey(pressed);
+        }
+      }
+    });
+
+    function openModalForProject(projKey, triggerEl) {
+      const proj = dreamProjects[projKey];
+      if (!proj) return;
+
+      lastActiveTrigger = triggerEl;
+      currentOpenProject = projKey;
+
+      AudioEngine.playClick();
+      modalHeading.textContent = proj.title;
+      modalLine1.textContent = proj.line1;
+      modalLine2.textContent = proj.line2;
+      modalSvgStage.innerHTML = proj.svg;
+
+      if (proj.interactive && projKey === 'piano') {
+        modalInteractiveArea.innerHTML = buildPianoHtml();
+        bindPianoKeys();
+      } else {
+        modalInteractiveArea.innerHTML = '';
+      }
+
+      dreamModal.showModal();
+      AudioEngine.playChime(659.25);
+
+      // Focus close button initially for accessibility
+      setTimeout(() => {
+        if (closeModalBtn) closeModalBtn.focus();
+      }, 50);
+    }
+
+    function closeModal() {
+      AudioEngine.playClick();
+      dreamModal.close();
+      currentOpenProject = null;
+      if (lastActiveTrigger && typeof lastActiveTrigger.focus === 'function') {
+        lastActiveTrigger.focus();
+      }
+    }
+
     document.querySelectorAll('.parcel-card').forEach(card => {
-      const openParcel = () => {
-        const projKey = card.getAttribute('data-project');
-        const proj = dreamProjects[projKey];
-        if (!proj) return;
-
-        AudioEngine.playClick();
-        modalHeading.textContent = proj.title;
-        modalLine1.textContent = proj.line1;
-        modalLine2.textContent = proj.line2;
-        modalSvgStage.innerHTML = proj.svg;
-
-        dreamModal.showModal();
-        AudioEngine.playChime(659.25);
+      const projKey = card.getAttribute('data-project');
+      const open = (e) => {
+        if (e) e.stopPropagation();
+        openModalForProject(projKey, card);
       };
 
-      card.addEventListener('click', openParcel);
+      card.addEventListener('click', open);
+      const btn = card.querySelector('.open-parcel-btn');
+      if (btn) btn.addEventListener('click', open);
       card.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          openParcel();
+          open();
         }
       });
     });
 
-    closeModalBtn.addEventListener('click', () => {
-      AudioEngine.playClick();
-      dreamModal.close();
+    closeModalBtn.addEventListener('click', closeModal);
+    dreamModal.addEventListener('cancel', () => {
+      currentOpenProject = null;
+      if (lastActiveTrigger && typeof lastActiveTrigger.focus === 'function') {
+        lastActiveTrigger.focus();
+      }
     });
 
-    packDreamBtn.addEventListener('click', () => {
-      AudioEngine.playChime(1046.5);
-      incrementOdometer();
-      packDreamBtn.textContent = 'Shipped via Paper Boat! ⛵✨';
-      setTimeout(() => {
-        packDreamBtn.textContent = 'Ship in Paper Boat ⛵';
-        dreamModal.close();
-      }, 1200);
-    });
+    if (modalPackBtn) {
+      modalPackBtn.addEventListener('click', () => {
+        AudioEngine.playChime(1046.5);
+        incrementOdometer();
+        modalPackBtn.textContent = 'Shipped via Paper Boat! ⛵✨';
+        setTimeout(() => {
+          modalPackBtn.textContent = 'Ship in Paper Boat ⛵';
+          closeModal();
+        }, 900);
+      });
+    }
 
     // Close on backdrop click
     dreamModal.addEventListener('click', (e) => {
@@ -802,7 +1008,7 @@
         e.clientY < rect.top ||
         e.clientY > rect.bottom
       ) {
-        dreamModal.close();
+        closeModal();
       }
     });
   }

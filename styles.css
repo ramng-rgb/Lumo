@@ -1305,6 +1305,201 @@ body.lullaby-sleeping-mode {
   margin-top: 0.75rem;
 }
 
+/* Marshmallow Piano Playable Keys (Step 4) */
+.marshmallow-piano-wrapper {
+  margin: 0.75rem 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.piano-hint-pill {
+  font-family: var(--font-pixel);
+  font-size: 0.95rem;
+  color: var(--butter-yellow);
+  background: rgba(35, 23, 56, 0.85);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  border: 1px dashed var(--butter-yellow);
+  text-align: center;
+}
+
+.piano-keyboard {
+  display: flex;
+  gap: 0.45rem;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0.65rem 0.5rem;
+  background: rgba(22, 14, 38, 0.95);
+  border: 2px solid var(--butter-yellow);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.marshmallow-key {
+  position: relative;
+  width: 44px;
+  height: 96px;
+  background: var(--key-bg, #ffc2d4);
+  border: 2px solid #2a1e3b;
+  border-radius: 12px 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.2rem;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #2a1e3b, 0 8px 12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.marshmallow-key:hover {
+  filter: brightness(1.1);
+}
+
+.marshmallow-key:active,
+.marshmallow-key.squished {
+  transform: translateY(6px) scale(0.96, 1.05);
+  box-shadow: 0 1px 0 #2a1e3b, 0 2px 4px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.2);
+}
+
+.key-letter {
+  font-family: var(--font-pixel);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #2a1e3b;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 4px;
+  padding: 0 4px;
+  line-height: 1.1;
+}
+
+.key-note {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2a1e3b;
+}
+
+@media (max-width: 480px) {
+  .marshmallow-key {
+    width: 33px;
+    height: 78px;
+    padding: 0.35rem 0.15rem;
+  }
+  .key-letter {
+    font-size: 0.95rem;
+  }
+  .key-note {
+    font-size: 0.75rem;
+  }
+}
+
+/* Looping Animated SVG Scenes for Parcels (Step 4) */
+.looping-parcel-svg {
+  width: 100%;
+  max-width: 240px;
+  overflow: visible;
+}
+
+/* Pancake Scene Animations */
+.pancake-stack-group {
+  animation: pancakeBob 3s ease-in-out infinite alternate;
+  transform-origin: center bottom;
+}
+@keyframes pancakeBob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-7px); }
+}
+
+.pancake-shadow {
+  animation: shadowPulse 3s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+@keyframes shadowPulse {
+  0% { transform: scale(1); opacity: 0.2; }
+  100% { transform: scale(0.85); opacity: 0.1; }
+}
+
+.syrup-drop-fall {
+  animation: syrupDropFall 1.8s ease-in infinite;
+}
+@keyframes syrupDropFall {
+  0% { opacity: 0; transform: translateY(0); }
+  40% { opacity: 1; }
+  90% { opacity: 1; transform: translateY(14px); }
+  100% { opacity: 0; transform: translateY(16px); }
+}
+
+.steam-wisp-1 {
+  animation: steamRise 2.8s ease-out infinite;
+}
+.steam-wisp-2 {
+  animation: steamRise 2.8s ease-out 1.4s infinite;
+}
+@keyframes steamRise {
+  0% { opacity: 0; transform: translateY(4px) scale(0.9); }
+  40% { opacity: 0.8; }
+  100% { opacity: 0; transform: translateY(-16px) scale(1.1); }
+}
+
+/* Jellyfish Scene Animations */
+.jellyfish-body-group {
+  animation: jellyFloat 3.6s ease-in-out infinite alternate;
+  transform-origin: center top;
+}
+@keyframes jellyFloat {
+  0% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-8px) scaleY(1.04); }
+  100% { transform: translateY(-2px) scaleY(0.97); }
+}
+
+.tentacle {
+  animation: tentacleSway 2.4s ease-in-out infinite alternate;
+  transform-origin: top center;
+}
+.tentacle.t1 { animation-delay: 0s; }
+.tentacle.t2 { animation-delay: 0.3s; }
+.tentacle.t3 { animation-delay: 0.6s; }
+.tentacle.t4 { animation-delay: 0.9s; }
+.tentacle.t5 { animation-delay: 1.2s; }
+
+@keyframes tentacleSway {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(5deg); }
+}
+
+.bubble-float {
+  animation: bubbleAscend 3s ease-in infinite;
+}
+.bubble-float.b1 { animation-delay: 0.2s; }
+.bubble-float.b2 { animation-delay: 1.1s; }
+.bubble-float.b3 { animation-delay: 1.8s; }
+.bubble-float.b4 { animation-delay: 0.7s; }
+
+@keyframes bubbleAscend {
+  0% { opacity: 0; transform: translateY(10px); }
+  30% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { opacity: 0; transform: translateY(-35px); }
+}
+
+.floating-book-group {
+  animation: bookBob 4s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+@keyframes bookBob {
+  0% { transform: translateY(0) rotate(-1deg); }
+  100% { transform: translateY(-5px) rotate(1.5deg); }
+}
+
 /* ==========================================================================
    SECTION 5: DREAM DELIVERY MAP (Tier 2 Hero Feature)
    SVG Route Synced with Scroll
