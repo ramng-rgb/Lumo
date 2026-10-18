@@ -296,12 +296,18 @@ body.lullaby-sleeping-mode {
   transition: opacity 0.3s ease;
 }
 
-/* Touch / Reduced Motion Fallback: Show secrets gently with soft pulse */
+/* Touch / Reduced Motion Fallback: Show secrets gently and disable intense loops */
 @media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
   .nightlight-canvas-layer {
     -webkit-mask-image: none !important;
     mask-image: none !important;
-    opacity: 0.45;
+    opacity: 0.45 !important;
   }
 }
 
