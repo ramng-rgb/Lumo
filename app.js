@@ -472,8 +472,7 @@
       }
     }
 
-    // Default to center if initial
-    updateCoordinates(window.innerWidth * 0.5, window.innerHeight * 0.35);
+    // Flashlight starts in darkness until user moves mouse or touches screen
 
     window.addEventListener('mousemove', (e) => {
       updateCoordinates(e.clientX, e.clientY);

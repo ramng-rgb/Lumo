@@ -148,6 +148,8 @@ body.lullaby-sleeping-mode {
 }
 
 .logo-badge {
+  position: relative;
+  z-index: 10;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -208,6 +210,8 @@ body.lullaby-sleeping-mode {
 
 /* Sound Toggle Button (Accessible & Fixed) */
 .sound-toggle-btn {
+  position: relative;
+  z-index: 10;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
