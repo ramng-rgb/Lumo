@@ -24,8 +24,27 @@
     konamiIndex: 0,
     deliveredDreamsCount: 1204,
     currentTownIndex: 0,
-    lullabyOscillators: []
+    lullabyOscillators: [],
+    dawnFinaleTriggered: false
   };
+
+  function spawnStarConfetti() {
+    const colors = ['#ffd36b', '#ffc2d4', '#bfeedd', '#fff7ee', '#ffaa88'];
+    for (let i = 0; i < 45; i++) {
+      const star = document.createElement('div');
+      star.className = 'cursor-sparkle';
+      star.textContent = ['★', '✦', '✧', '💛', '✨'][Math.floor(Math.random() * 5)];
+      star.style.left = `${Math.random() * 100}vw`;
+      star.style.top = `${Math.random() * 60 + 10}vh`;
+      star.style.fontSize = `${Math.random() * 18 + 14}px`;
+      star.style.color = colors[Math.floor(Math.random() * colors.length)];
+      star.style.setProperty('--sparkle-dx', `${(Math.random() - 0.5) * 90}px`);
+      star.style.setProperty('--sparkle-dy', `${Math.random() * 110 + 40}px`);
+      document.body.appendChild(star);
+
+      setTimeout(() => star.remove(), 1200);
+    }
+  }
 
   // Konami Code Sequence: Up Up Down Down Left Right Left Right B A
   const KONAMI_CODE = [
@@ -582,8 +601,52 @@
         }
       });
 
-      if (clamped >= 0.98) {
+      if (clamped >= 0.96) {
         nextStopLabel.textContent = "Sunrise Cove Reached! ☀️";
+        if (!state.dawnFinaleTriggered) {
+          triggerDawnFinale();
+        }
+      }
+    }
+
+    function triggerDawnFinale() {
+      state.dawnFinaleTriggered = true;
+      document.body.classList.add('dawn-sunrise-mode');
+      
+      const dawnCard = document.getElementById('dawnFinaleCard');
+      const dawnMsg = document.getElementById('dawnMessageText');
+      if (dawnCard) {
+        dawnCard.classList.add('active');
+      }
+
+      // Roll odometer by +1
+      incrementOdometer();
+      if (dawnMsg) {
+        dawnMsg.textContent = `Dream #${state.deliveredDreamsCount.toLocaleString()} delivered safely before first morning light. Lumo curls up into cloud pillows. Sleep tight.`;
+      }
+
+      // Wind-chime sounds
+      AudioEngine.playTownArrival();
+      setTimeout(() => AudioEngine.playChime(1174.66), 400);
+
+      // Star confetti burst
+      spawnStarConfetti();
+
+      // Replay button listener
+      const replayBtn = document.getElementById('replayDeliveryBtn');
+      if (replayBtn) {
+        replayBtn.onclick = () => {
+          AudioEngine.playClick();
+          state.dawnFinaleTriggered = false;
+          if (dawnCard) dawnCard.classList.remove('active');
+          document.body.classList.remove('dawn-sunrise-mode');
+          mapSection.scrollIntoView({ behavior: 'smooth' });
+          applyMapProgress(0);
+          const toast = document.getElementById('webringToast');
+          if (typeof showWebringToast === 'function') {
+            showWebringToast("New paper boat launched! ⛵✨");
+          }
+        };
       }
     }
 
@@ -858,24 +921,6 @@
     closeSecretBtn.addEventListener('click', () => {
       secretModal.close();
     });
-
-    function spawnStarConfetti() {
-      const colors = ['#ffd36b', '#ffc2d4', '#bfeedd', '#fff7ee'];
-      for (let i = 0; i < 40; i++) {
-        const star = document.createElement('div');
-        star.className = 'cursor-sparkle';
-        star.textContent = ['★', '✦', '✧', '💛'][Math.floor(Math.random() * 4)];
-        star.style.left = `${Math.random() * 100}vw`;
-        star.style.top = `${Math.random() * 60 + 10}vh`;
-        star.style.fontSize = `${Math.random() * 16 + 14}px`;
-        star.style.color = colors[Math.floor(Math.random() * colors.length)];
-        star.style.setProperty('--sparkle-dx', `${(Math.random() - 0.5) * 80}px`);
-        star.style.setProperty('--sparkle-dy', `${Math.random() * 100 + 40}px`);
-        document.body.appendChild(star);
-
-        setTimeout(() => star.remove(), 1200);
-      }
-    }
   }
 
   /* ==========================================================================

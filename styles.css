@@ -1428,6 +1428,108 @@ body.lullaby-sleeping-mode {
 }
 
 /* ==========================================================================
+   DAWN FINALE SHOWCASE CARD (Step 2 Signature Feature)
+   ========================================================================== */
+body.dawn-sunrise-mode {
+  background: linear-gradient(
+    180deg,
+    #3b1f4a 0%,
+    #5f275e 25%,
+    #983b68 50%,
+    #d45d65 72%,
+    #ff9977 88%,
+    #ffd39a 100%
+  ) !important;
+  transition: background 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dawn-finale-card {
+  margin-top: 2rem;
+  background: linear-gradient(135deg, rgba(45, 25, 60, 0.95) 0%, rgba(25, 15, 42, 0.98) 100%);
+  border: 3px solid var(--glow-gold);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 48px rgba(255, 170, 136, 0.35), 0 0 24px rgba(255, 211, 107, 0.4);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dawn-finale-card.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dawn-sun-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 140px;
+  background: radial-gradient(ellipse, #ffaa88 0%, #ffd36b 50%, transparent 75%);
+  filter: blur(25px);
+  pointer-events: none;
+  opacity: 0.85;
+  animation: dawnAura 3s ease-in-out infinite alternate;
+}
+@keyframes dawnAura {
+  0% { transform: translateX(-50%) scale(0.9); opacity: 0.6; }
+  100% { transform: translateX(-50%) scale(1.15); opacity: 0.95; }
+}
+
+.dawn-badge {
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  color: var(--mint-dream);
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.dawn-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  color: var(--butter-yellow);
+  margin-bottom: 0.75rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.dawn-lumo-sleep-preview {
+  margin: 0.5rem auto 1rem;
+  max-width: 160px;
+}
+.mini-sleeping-lumo-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 4px 12px rgba(255, 211, 107, 0.4));
+  animation: miniSleepFloat 3.5s ease-in-out infinite;
+}
+@keyframes miniSleepFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.dawn-message {
+  font-size: 1.05rem;
+  color: var(--cream-soft);
+  max-width: 520px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.5;
+}
+
+.dawn-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* ==========================================================================
    SECTION 6: FOOTER - CREDITS, GUESTBOOK, WEBRING
    ========================================================================== */
 .footer-section {
