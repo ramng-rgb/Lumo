@@ -2348,3 +2348,97 @@ body.dawn-sunrise-mode {
     text-align: center;
   }
 }
+
+/* ==========================================================================
+   LUMO COMPANION (Step 5: Immersion Peeking Character)
+   ========================================================================== */
+.lumo-companion {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 850;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.companion-bubble {
+  background: rgba(22, 14, 38, 0.95);
+  color: var(--butter-yellow);
+  border: 1.5px solid var(--butter-yellow);
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-bottom: -4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  animation: bubbleFloat 2.5s ease-in-out infinite alternate;
+  white-space: nowrap;
+  user-select: none;
+}
+
+@keyframes bubbleFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+.companion-avatar-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.companion-avatar-btn:hover {
+  transform: translateY(-4px) scale(1.08);
+}
+
+.companion-avatar-btn:focus-visible {
+  outline: 2px solid var(--mint-dream);
+  border-radius: 50%;
+}
+
+.companion-lumo-svg {
+  width: 72px;
+  height: 58px;
+  overflow: visible;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+}
+
+.companion-hand {
+  animation: companionWave 2s ease-in-out infinite alternate;
+  transform-origin: 70px 45px;
+}
+
+@keyframes companionWave {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(18deg); }
+}
+
+/* Wiggle animation on click/tap */
+.lumo-companion.wiggling {
+  animation: lumoSquishWiggle 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes lumoSquishWiggle {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.2, 0.85) rotate(-10deg); }
+  50% { transform: scale(0.9, 1.15) rotate(12deg); }
+  75% { transform: scale(1.08, 0.95) rotate(-6deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* Hide on screens narrower than 380px if it overlaps content */
+@media (max-width: 380px) {
+  .lumo-companion {
+    display: none !important;
+  }
+}
+

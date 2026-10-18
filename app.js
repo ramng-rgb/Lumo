@@ -1530,6 +1530,60 @@
     }
   }
 
+  // 5. Lumo Companion (Step 5: Immersion Peeking Character)
+  function setupLumoCompanion() {
+    const companion = document.getElementById('lumoCompanion');
+    const avatarBtn = document.getElementById('companionAvatarBtn');
+    const bubble = document.getElementById('companionBubble');
+
+    if (!companion || !avatarBtn || !bubble) return;
+
+    const sectionEmojis = {
+      hero: "💤",
+      about: "💛",
+      story: "✨",
+      work: "🥞",
+      map: "⛵",
+      footer: "📝"
+    };
+
+    let activeSectionId = "hero";
+    let isTemporarilyTalking = false;
+
+    const sections = document.querySelectorAll('section, footer');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            activeSectionId = entry.target.id;
+            if (!isTemporarilyTalking) {
+              bubble.textContent = sectionEmojis[activeSectionId] || "✨";
+            }
+          }
+        });
+      }, { threshold: 0.3 });
+
+      sections.forEach(sec => observer.observe(sec));
+    }
+
+    const playfulGreetings = ["🥰 Hi!", "✨ Giggle!", "💛 Hehe!", "🌙 Boop!"];
+    avatarBtn.addEventListener('click', () => {
+      AudioEngine.playGiggle();
+      companion.classList.remove('wiggling');
+      void companion.offsetWidth;
+      companion.classList.add('wiggling');
+
+      isTemporarilyTalking = true;
+      const greeting = playfulGreetings[Math.floor(Math.random() * playfulGreetings.length)];
+      bubble.textContent = greeting;
+
+      setTimeout(() => {
+        isTemporarilyTalking = false;
+        bubble.textContent = sectionEmojis[activeSectionId] || "✨";
+      }, 1600);
+    });
+  }
+
   /* ==========================================================================
      10. INITIALIZATION
      ========================================================================== */
@@ -1545,6 +1599,8 @@
     setupGuestbook();
     setupResponsiveChaosMode();
     setupSparkleTrail();
+    setupLumoCompanion();
   });
 
 })();
+

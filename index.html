@@ -991,6 +991,28 @@
     <button class="hint-close-btn" id="closeIdleHint" aria-label="Dismiss hint">✕</button>
   </div>
 
-  <script src="app.js?v=2.5"></script>
+  <!-- Fixed Peeking Lumo Companion (Step 5: Immersion) -->
+  <aside class="lumo-companion" id="lumoCompanion" role="complementary" aria-label="Lumo Companion">
+    <div class="companion-bubble" id="companionBubble" aria-live="polite">💤</div>
+    <button type="button" class="companion-avatar-btn" id="companionAvatarBtn" aria-label="Tap to tickle Lumo">
+      <svg viewBox="0 0 100 80" class="companion-lumo-svg">
+        <circle cx="50" cy="46" r="32" fill="#ffd36b" opacity="0.35" class="companion-glow"/>
+        <ellipse cx="50" cy="48" rx="34" ry="24" fill="#fff7ee" stroke="#dbe3f5" stroke-width="2"/>
+        <circle cx="50" cy="52" r="14" fill="#ffd36b" opacity="0.85"/>
+        <circle cx="50" cy="52" r="8" fill="#ffe39a"/>
+        <path d="M 44 24 C 54 28, 52 38, 44 42 C 40 44, 34 42, 34 42 C 42 38, 44 30, 38 26 Z" fill="#ffd36b" stroke="#e5b43b" stroke-width="1.5"/>
+        <circle cx="43" cy="45" r="3.5" fill="#2a1e3b"/>
+        <circle cx="41.5" cy="43.5" r="1.2" fill="#ffffff"/>
+        <circle cx="57" cy="45" r="3.5" fill="#2a1e3b"/>
+        <circle cx="55.5" cy="43.5" r="1.2" fill="#ffffff"/>
+        <ellipse cx="36" cy="50" rx="5" ry="3" fill="#ffc2d4"/>
+        <ellipse cx="64" cy="50" rx="5" ry="3" fill="#ffc2d4"/>
+        <path d="M 47 52 Q 50 55 53 52" stroke="#2a1e3b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="76" cy="42" rx="7" ry="5" fill="#fff7ee" stroke="#dbe3f5" stroke-width="1.5" class="companion-hand"/>
+      </svg>
+    </button>
+  </aside>
+
+  <script src="app.js?v=2.6"></script>
 </body>
 </html>
