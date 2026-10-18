@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Soft Golden Nightlight Radial Glow -->
+    <radialGradient id="lumoFaviconGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd36b" stop-opacity="0.9" />
+      <stop offset="60%" stop-color="#ffe39a" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#ffd36b" stop-opacity="0" />
+    </radialGradient>
+    <!-- Cloud Gradient -->
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f0f4ff" />
+    </linearGradient>
+  </defs>
+
+  <!-- Circular Dark Sky Backdrop -->
+  <circle cx="32" cy="32" r="30" fill="#181432" stroke="#3b1f4a" stroke-width="2" />
+  
+  <!-- Nightlight Aura -->
+  <circle cx="32" cy="36" r="18" fill="url(#lumoFaviconGlow)" />
+
+  <!-- Lumo Cloud Silhouette -->
+  <g id="lumoCloud">
+    <!-- Cloud Puffs -->
+    <path d="M20,38 
+             a10,10 0 0,1 12,-9 
+             a12,12 0 0,1 18,2 
+             a9,9 0 0,1 2,13 
+             a8,8 0 0,1 -8,6 
+             l-18,0 
+             a7,7 0 0,1 -6,-12 z" 
+          fill="url(#cloudGrad)" 
+          stroke="#3b1f4a" 
+          stroke-width="1.5" 
+          stroke-linejoin="round" />
+
+    <!-- Golden Crescent Forehead Curl -->
+    <path d="M 33 22 Q 38 18 36 25 Q 34 23 33 22 Z" fill="#ffd36b" stroke="#d49b25" stroke-width="0.75" />
+
+    <!-- Sleepy Smiling Eyes -->
+    <path d="M 27 34 Q 30 37 33 34" fill="none" stroke="#2a1e3b" stroke-width="1.75" stroke-linecap="round" />
+    <path d="M 37 34 Q 40 37 43 34" fill="none" stroke="#2a1e3b" stroke-width="1.75" stroke-linecap="round" />
+
+    <!-- Rosy Blush Cheeks -->
+    <ellipse cx="25" cy="36" rx="2.5" ry="1.5" fill="#ffc2d4" />
+    <ellipse cx="45" cy="36" rx="2.5" ry="1.5" fill="#ffc2d4" />
+
+    <!-- Sweet Tiny Smile -->
+    <path d="M 34 38 Q 35 40 36 38" fill="none" stroke="#2a1e3b" stroke-width="1.25" stroke-linecap="round" />
+
+    <!-- Glowing Belly Star Dot -->
+    <circle cx="35" cy="43" r="2" fill="#ffd36b" />
+  </g>
+</svg>

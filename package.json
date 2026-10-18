@@ -1,0 +1,25 @@
+{
+  "name": "lumos-dream-delivery-service",
+  "version": "1.0.0",
+  "description": "An early-web inspired, cozy, hackathon-winning bedtime web sanctuary starring Lumo the Baby Moon-Cloud.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "dev": "python3 -m http.server 8080",
+    "serve": "python3 -m http.server 8080",
+    "check:syntax": "node -c app.js",
+    "check:words": "node scripts/audit-words.js",
+    "test": "node -c app.js && node scripts/audit-words.js"
+  },
+  "keywords": [
+    "cozy-web",
+    "early-web",
+    "web-audio-api",
+    "svg-animation",
+    "bedtime",
+    "lumo"
+  ],
+  "author": "Lumo Dream Co.",
+  "license": "MIT"
+}
