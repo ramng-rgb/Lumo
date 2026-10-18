@@ -58,7 +58,7 @@
         <span class="ticker-divider">✦</span>
         <span>⛵ Paper Boat #4,821 en route to Sunrise Cove</span>
         <span class="ticker-divider">✦</span>
-        <span>💤 1,204+ dreams safely tucked in tonight</span>
+        <span id="marqueeDreamCount">💤 1,204+ dreams safely tucked in tonight</span>
       </div>
     </div>
   </header>
@@ -66,48 +66,47 @@
   <!-- Interactive Nightlight Flashlight Mask Layer -->
   <div class="nightlight-canvas-layer" id="nightlightLayer" aria-hidden="true">
     <div class="secret-skies" id="secretSkies">
-      <!-- Hidden constellations and sleeping friends revealed only by flashlight -->
-      <div class="hidden-item constellation teapot" style="top: 18%; left: 15%;">
-        <svg viewBox="0 0 100 80" class="constellation-svg">
+      <!-- Hidden constellations and sleeping friends: positioned in clear sky margins so they never cover text -->
+      <div class="hidden-item constellation teapot" style="top: 15%; left: 3%;">
+        <svg viewBox="0 0 160 85" class="constellation-svg">
           <polyline points="20,50 40,20 70,25 85,55 60,65 25,60 20,50" stroke="#ffd36b" stroke-dasharray="3,3" fill="none" stroke-width="1.5" />
           <circle cx="20" cy="50" r="3" fill="#fff7ee" />
           <circle cx="40" cy="20" r="4" fill="#ffd36b" />
           <circle cx="70" cy="25" r="3.5" fill="#fff7ee" />
           <circle cx="85" cy="55" r="4" fill="#ffd36b" />
           <circle cx="60" cy="65" r="3" fill="#ffe39a" />
-          <text x="35" y="75" fill="#ffd36b" font-family="VT323" font-size="14">Teapot of Dreams</text>
+          <text x="10" y="78" fill="#ffd36b" font-family="VT323" font-size="14">Teapot of Dreams</text>
         </svg>
       </div>
 
-      <div class="hidden-item sleeper bear" style="top: 42%; right: 12%;">
-        <svg viewBox="0 0 80 60" class="sleeper-svg">
-          <ellipse cx="40" cy="35" rx="25" ry="18" fill="#ffc2d4" opacity="0.9"/>
-          <circle cx="25" cy="22" r="7" fill="#ffc2d4"/>
-          <circle cx="55" cy="22" r="7" fill="#ffc2d4"/>
-          <path d="M 32 35 Q 36 38 40 35" stroke="#3b1f4a" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <path d="M 44 35 Q 48 38 52 35" stroke="#3b1f4a" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <circle cx="42" cy="40" r="3" fill="#3b1f4a"/>
-          <text x="24" y="56" fill="#ffe39a" font-family="VT323" font-size="13">Snoozing Cub 💤</text>
+      <div class="hidden-item sleeper bear" style="top: 36%; right: 3%;">
+        <svg viewBox="0 0 140 70" class="sleeper-svg">
+          <ellipse cx="60" cy="35" rx="25" ry="18" fill="#ffc2d4" opacity="0.9"/>
+          <circle cx="45" cy="22" r="7" fill="#ffc2d4"/>
+          <circle cx="75" cy="22" r="7" fill="#ffc2d4"/>
+          <path d="M 52 35 Q 56 38 60 35" stroke="#3b1f4a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M 64 35 Q 68 38 72 35" stroke="#3b1f4a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="62" cy="40" r="3" fill="#3b1f4a"/>
+          <text x="18" y="62" fill="#ffe39a" font-family="VT323" font-size="13">Snoozing Cub 💤</text>
         </svg>
       </div>
 
-      <div class="hidden-item constellation bunny" style="top: 68%; left: 22%;">
-        <svg viewBox="0 0 90 70" class="constellation-svg">
+      <div class="hidden-item constellation bunny" style="top: 65%; left: 3%;">
+        <svg viewBox="0 0 180 80" class="constellation-svg">
           <polyline points="25,55 35,40 50,35 65,45 60,60 35,62" stroke="#bfeedd" stroke-dasharray="2,2" fill="none" stroke-width="1.5" />
           <line x1="35" y1="40" x2="30" y2="15" stroke="#bfeedd" stroke-width="1.5" stroke-dasharray="2,2" />
           <line x1="50" y1="35" x2="48" y2="12" stroke="#bfeedd" stroke-width="1.5" stroke-dasharray="2,2" />
           <circle cx="30" cy="15" r="3" fill="#fff7ee" />
           <circle cx="48" cy="12" r="3" fill="#ffd36b" />
           <circle cx="65" cy="45" r="4" fill="#bfeedd" />
-          <text x="20" y="68" fill="#bfeedd" font-family="VT323" font-size="13">Moon Bunny Constellation</text>
+          <text x="10" y="74" fill="#bfeedd" font-family="VT323" font-size="13">Moon Bunny Constellation</text>
         </svg>
       </div>
 
-      <!-- Hidden Sleeping Star Easter Egg Target -->
-      <button class="hidden-item sleeping-star-egg" id="sleepingStarBtn" style="bottom: 12%; right: 25%;" aria-label="A tiny sleeping star in the night sky. Tap 3 times to tuck Lumo in!">
+      <!-- Hidden Sleeping Star Easter Egg Target in safe sky margin -->
+      <button class="hidden-item sleeping-star-egg" id="sleepingStarBtn" style="bottom: 8%; right: 4%;" aria-label="A tiny sleeping star in the night sky. Tap 3 times to tuck Lumo in!">
         <svg viewBox="0 0 60 60" class="sleeping-star-svg">
           <polygon points="30,5 37,22 55,22 41,33 46,50 30,39 14,50 19,33 5,22 23,22" fill="#ffd36b" stroke="#ffe39a" stroke-width="2"/>
-          <!-- Sleepy eyes on the star -->
           <path d="M 23 27 Q 26 30 29 27" stroke="#3b1f4a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
           <path d="M 33 27 Q 36 30 39 27" stroke="#3b1f4a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
           <circle cx="21" cy="30" r="1.5" fill="#ffc2d4"/>
@@ -617,7 +616,22 @@
                 <div class="parcel-content">
                   <h3 class="parcel-name">The Marshmallow Piano Dream</h3>
                   <p class="parcel-pitch">Squishy pastel musical keys that bounce softly and chime lullaby chords in your sleep.</p>
-                  <button class="open-parcel-btn" aria-expanded="false" aria-controls="modal-piano">
+                  <button class="open-parcel-btn" aria-expanded="false" aria-controls="dreamModal">
+                    <span>Play Piano</span> ✦
+                  </button>
+                </div>
+              </article>
+
+              <!-- Project 4: Cloud Trampoline Dream -->
+              <article class="parcel-card" role="listitem" tabindex="0" data-project="trampoline">
+                <div class="parcel-lid">
+                  <span class="parcel-stamp">PARCEL #04</span>
+                  <span class="parcel-icon">☁️</span>
+                </div>
+                <div class="parcel-content">
+                  <h3 class="parcel-name">The Cloud Trampoline Dream</h3>
+                  <p class="parcel-pitch">Springy puff clouds that bounce you high enough to high-five the moon and catch stars.</p>
+                  <button class="open-parcel-btn" aria-expanded="false" aria-controls="dreamModal">
                     <span>Unseal Parcel</span> ✦
                   </button>
                 </div>
@@ -627,7 +641,7 @@
             <!-- Bonus Real-Skill Gadget: Interactive CSS Nightlight Dial -->
             <div class="workshop-gadget" aria-label="Interactive Nightlight Dimmer Gadget">
               <div class="gadget-header">
-                <span class="gadget-badge">BONUS SKILL GADGET</span>
+                <span class="gadget-badge">LUMO'S GADGET</span>
                 <h4>Lumo's Belly Glow Dimmer Dial</h4>
               </div>
               <div class="gadget-controls">
@@ -675,7 +689,7 @@
          ============================================== -->
     <section id="map" class="section map-section" aria-labelledby="map-title">
       <div class="container">
-        <div class="section-tag">★ Tier 2 Standout Feature ★</div>
+        <div class="section-tag">★ Night Delivery Route ★</div>
         <h2 id="map-title" class="section-heading">The Night Delivery Route</h2>
         <p class="section-subtext">Scroll down to guide Lumo's paper boat along the starlit route. Watch each village light up upon arrival!</p>
 
@@ -860,8 +874,8 @@
           <div class="webring-links">
             <button class="webring-btn" id="webringPrev" aria-label="Previous site in Dreamland Webring">« Prev Star</button>
             <span class="webring-badge">HUB: Baby Web Ring #402</span>
-            <button class="webring-btn" id="webringRandom" aria-label="Random site in Dreamland Webring">✦ Random ✦</button>
-            <button class="webring-btn" id="webringNext" aria-label="Next site in Dreamland Webring">Next Moon »</button>
+            <button class="webring-btn" id="webringRandom" aria-label="Random dream section in Dreamland">✦ Random Dream ✦</button>
+            <button class="webring-btn" id="webringNext" aria-label="Next site in Dreamland Webring">Next Star »</button>
           </div>
         </div>
 
@@ -883,7 +897,7 @@
             <li><strong>Audio:</strong> In-browser Web Audio API oscillators (zero external sound files).</li>
             <li><strong>Art:</strong> Original hand-coded SVGs & CSS by Antigravity.</li>
           </ul>
-          <p class="copyright-notice">© 2026 Lumo's Dream Delivery Service. Sleep tight! 🌙</p>
+          <p class="copyright-notice">© 2026 Lumo's Dream Delivery Service. Crafted with Antigravity & Claude. Sleep tight! 🌙</p>
         </div>
       </div>
     </footer>
@@ -900,9 +914,10 @@
     </div>
   </dialog>
 
-  <!-- Subtle Idle Hint ("psst...") after 30s -->
-  <div class="idle-hint-bubble" id="idleHint" aria-hidden="true">
-    <span class="idle-text">psst... tap the sleeping star in the night sky or click the logo 3 times! ✨</span>
+  <!-- Idle Hint ("psst...") with Close Button -->
+  <div class="idle-hint-bubble" id="idleHint" role="status" aria-live="polite">
+    <span class="idle-text">psst... tap the sleeping star in the sky or tap the logo 3 times! ✨</span>
+    <button class="hint-close-btn" id="closeIdleHint" aria-label="Dismiss hint">✕</button>
   </div>
 
   <script src="app.js"></script>

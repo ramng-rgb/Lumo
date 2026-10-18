@@ -49,6 +49,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 85px;
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
 }
@@ -245,11 +246,12 @@ body.lullaby-sleeping-mode {
 .delivery-ticker {
   background: var(--midnight-deep);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 0.2rem 0;
+  padding: 0.15rem 0;
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--font-pixel);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
+  line-height: 1.3;
   color: var(--butter-yellow);
 }
 .ticker-content {
@@ -261,7 +263,7 @@ body.lullaby-sleeping-mode {
   animation-play-state: paused;
 }
 .ticker-divider {
-  margin: 0 1rem;
+  margin: 0 0.85rem;
   color: var(--blush-pink);
 }
 @keyframes tickerSlide {
@@ -276,7 +278,7 @@ body.lullaby-sleeping-mode {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 40;
+  z-index: 1; /* Sits below content container (z-index: 10) so it never covers readable text or cards */
   /* Mask following mouse cursor coordinate */
   -webkit-mask-image: radial-gradient(
     circle var(--mask-radius, 150px) at var(--mouse-x, -999px) var(--mouse-y, -999px),
@@ -307,23 +309,32 @@ body.lullaby-sleeping-mode {
   position: relative;
   width: 100%;
   height: 100%;
+  pointer-events: none;
 }
 .hidden-item {
   position: absolute;
-  pointer-events: auto;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: visible;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   filter: drop-shadow(0 0 8px rgba(255, 211, 107, 0.7));
+}
+.hidden-item text {
+  white-space: nowrap;
+  overflow: visible;
 }
 .hidden-item:hover {
   transform: scale(1.12);
 }
 .constellation-svg {
-  width: 100px;
-  height: 80px;
+  width: 150px;
+  height: auto;
+  overflow: visible;
 }
 .sleeper-svg {
-  width: 80px;
-  height: 60px;
+  width: 130px;
+  height: auto;
+  overflow: visible;
 }
 
 /* Hidden Sleeping Star Easter Egg */
@@ -337,6 +348,7 @@ body.lullaby-sleeping-mode {
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  pointer-events: auto;
 }
 .sleeping-star-svg {
   width: 48px;
@@ -366,8 +378,10 @@ body.lullaby-sleeping-mode {
    GLOBAL SECTION STYLING (Strict word counts <= 150 words)
    ========================================================================== */
 .section {
-  padding: 6rem 0 5rem;
+  padding: 5rem 0 4rem;
+  scroll-margin-top: 85px;
   position: relative;
+  z-index: 10;
   min-height: 80vh;
   display: flex;
   flex-direction: column;
@@ -1417,8 +1431,9 @@ body.lullaby-sleeping-mode {
    SECTION 6: FOOTER - CREDITS, GUESTBOOK, WEBRING
    ========================================================================== */
 .footer-section {
-  padding: 6rem 0 3rem;
-  background: rgba(18, 11, 28, 0.95);
+  padding: 4rem 0 2rem;
+  min-height: auto;
+  background: rgba(18, 11, 28, 0.98);
   border-top: 3px solid var(--butter-yellow);
 }
 
@@ -1742,26 +1757,53 @@ body.lullaby-sleeping-mode {
 /* Idle Hint ("psst...") */
 .idle-hint-bubble {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
   background: var(--butter-yellow);
   color: var(--text-dark);
   border: 2px solid var(--plum-deep);
   border-radius: var(--radius-pill);
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.75rem 0.4rem 1rem;
   font-family: var(--font-display);
   font-size: 0.85rem;
   font-weight: 700;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-  z-index: 800;
+  z-index: 850;
   opacity: 0;
-  transform: translateY(12px);
   pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: calc(100vw - 32px);
+  width: max-content;
 }
 .idle-hint-bubble.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.hint-close-btn {
+  background: var(--plum-deep);
+  color: var(--butter-yellow);
+  border: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s ease;
+}
+.hint-close-btn:hover {
+  transform: scale(1.15);
+  background: #ff5f56;
+  color: #fff;
 }
 
 /* Cursor Sparkles (Side Quest +2) */

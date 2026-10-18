@@ -182,22 +182,21 @@
     const soundIcon = document.getElementById('soundIcon');
     const soundText = document.getElementById('soundText');
 
-    // Retrieve saved state (default muted)
-    const savedMute = localStorage.getItem('lumo_sound_muted');
-    state.audioMuted = savedMute !== 'false'; // default true
+    // Always start muted by default until visitor explicitly clicks (browser gesture requirement)
+    state.audioMuted = true;
 
     function updateMuteButtonUI() {
       if (state.audioMuted) {
         soundIcon.textContent = '🔇';
         soundText.textContent = 'Sound: OFF';
         muteToggle.setAttribute('aria-pressed', 'false');
-        muteToggle.setAttribute('aria-label', 'Sound is muted. Click or press space to enable cozy chimes and lullabies');
+        muteToggle.setAttribute('aria-label', 'Sound is muted. Tap to turn on cozy chimes and lullabies');
         muteToggle.classList.remove('sound-active');
       } else {
         soundIcon.textContent = '🔔';
         soundText.textContent = 'Sound: ON';
         muteToggle.setAttribute('aria-pressed', 'true');
-        muteToggle.setAttribute('aria-label', 'Sound is enabled. Click or press space to mute');
+        muteToggle.setAttribute('aria-label', 'Sound is enabled. Tap to mute');
         muteToggle.classList.add('sound-active');
       }
     }
@@ -431,12 +430,28 @@
       clearTimeout(state.idleHintTimer);
 
       const idleHint = document.getElementById('idleHint');
-      if (idleHint) idleHint.classList.remove('visible');
+      if (idleHint && !state.idleHintDismissed) idleHint.classList.remove('visible');
 
       state.idleTimer = setTimeout(triggerYawn, 8000);
       state.idleHintTimer = setTimeout(() => {
-        if (idleHint) idleHint.classList.add('visible');
+        if (idleHint && !state.idleHintDismissed) {
+          idleHint.classList.add('visible');
+          // Auto-hide after 6s as requested
+          setTimeout(() => {
+            if (idleHint) idleHint.classList.remove('visible');
+          }, 6000);
+        }
       }, 30000);
+    }
+
+    const closeIdleHint = document.getElementById('closeIdleHint');
+    if (closeIdleHint) {
+      closeIdleHint.addEventListener('click', (e) => {
+        e.stopPropagation();
+        state.idleHintDismissed = true;
+        const idleHint = document.getElementById('idleHint');
+        if (idleHint) idleHint.classList.remove('visible');
+      });
     }
 
     resetIdleTimer();
@@ -657,6 +672,20 @@
                 <text x="60" y="45" fill="#ffd36b" font-size="20">♪</text>
                 <text x="120" y="40" fill="#ffc2d4" font-size="22">♫</text>
                 <text x="100" y="142" text-anchor="middle" fill="#ffc2d4" font-family="VT323" font-size="16">SQUISHY ACCORD</text>
+              </svg>`
+      },
+      trampoline: {
+        title: "The Cloud Trampoline Dream",
+        line1: "Springy puff clouds that bounce you high enough to high-five the moon and catch falling stars.",
+        line2: "No gravity, only gentle giggles as you land softly on a feather mattress in the sky.",
+        svg: `<svg viewBox="0 0 200 150" style="width:100%;max-width:200px;">
+                <ellipse cx="100" cy="110" rx="65" ry="22" fill="#fff7ee" stroke="#ffd36b" stroke-width="2"/>
+                <ellipse cx="100" cy="108" rx="45" ry="14" fill="#ffc2d4" opacity="0.6"/>
+                <polygon points="100,45 106,60 122,60 109,70 114,85 100,75 86,85 91,70 78,60 94,60" fill="#ffd36b"/>
+                <circle cx="96" cy="62" r="1.5" fill="#3b1f4a"/>
+                <circle cx="104" cy="62" r="1.5" fill="#3b1f4a"/>
+                <path d="M 85 95 Q 100 105 115 95" stroke="#ffe39a" stroke-width="2.5" fill="none"/>
+                <text x="100" y="142" text-anchor="middle" fill="#ffe39a" font-family="VT323" font-size="16">MOON BOUNCE</text>
               </svg>`
       }
     };
@@ -892,6 +921,12 @@
         }
       }
     }
+
+    // Keep marquee delivery counter strictly synchronized from this single source of truth
+    const marqueeSpan = document.getElementById('marqueeDreamCount');
+    if (marqueeSpan) {
+      marqueeSpan.textContent = `💤 ${num.toLocaleString()}+ dreams safely tucked in tonight`;
+    }
   }
 
   // 2. Live Guestbook with Pre-seeded Wishes, Rate Limit & Profanity Safety (+2)
@@ -1012,24 +1047,57 @@
     window.addEventListener('resize', updateDimensions);
     updateDimensions();
 
-    // Webring interactive buttons
+    // Webring interactive buttons (real navigation & fun actions)
     const webringPrev = document.getElementById('webringPrev');
     const webringRandom = document.getElementById('webringRandom');
     const webringNext = document.getElementById('webringNext');
+    const navSections = ['hero', 'about', 'story', 'work', 'map', 'footer'];
 
-    [webringPrev, webringRandom, webringNext].forEach(btn => {
-      if (btn) {
-        btn.addEventListener('click', () => {
-          AudioEngine.playClick();
-          const orig = btn.textContent;
-          btn.textContent = '✦ Teleporting...';
-          setTimeout(() => {
-            btn.textContent = orig;
-            AudioEngine.playChime(784);
-          }, 800);
-        });
+    function showWebringToast(msg) {
+      let toast = document.getElementById('webringToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'webringToast';
+        toast.className = 'idle-hint-bubble visible';
+        toast.style.zIndex = '950';
+        toast.style.bottom = '32px';
+        document.body.appendChild(toast);
       }
-    });
+      toast.innerHTML = `<span class="idle-text">${msg}</span>`;
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 2600);
+    }
+
+    if (webringPrev) {
+      webringPrev.addEventListener('click', () => {
+        AudioEngine.playClick();
+        window.scrollBy({ top: -window.innerHeight * 0.7, behavior: 'smooth' });
+        showWebringToast("« Sailing back toward previous starlight! ✨");
+        AudioEngine.playChime(659);
+      });
+    }
+
+    if (webringNext) {
+      webringNext.addEventListener('click', () => {
+        AudioEngine.playClick();
+        window.scrollBy({ top: window.innerHeight * 0.7, behavior: 'smooth' });
+        showWebringToast("Next Star on the horizon! » 🌙");
+        AudioEngine.playChime(784);
+      });
+    }
+
+    if (webringRandom) {
+      webringRandom.addEventListener('click', () => {
+        AudioEngine.playClick();
+        const randId = navSections[Math.floor(Math.random() * navSections.length)];
+        const target = document.getElementById(randId);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          showWebringToast(`✦ Teleported to the ${randId.toUpperCase()} realm! ⛵`);
+          AudioEngine.playChime(987);
+        }
+      });
+    }
   }
 
   // 4. Sparkle Cursor Trail with rAF Pooling (+2)
