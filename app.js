@@ -459,10 +459,21 @@
      5. TIER 2 STANDOUT FEATURE 2: NIGHTLIGHT FLASHLIGHT MASK
      ========================================================================== */
   function setupNightlightCursor() {
-    function updateCoordinates(x, y) {
+    let maskSize = 150;
+
+    function updateCoordinates(x, y, pulse = false) {
       document.documentElement.style.setProperty('--mouse-x', `${x}px`);
       document.documentElement.style.setProperty('--mouse-y', `${y}px`);
+      if (pulse) {
+        document.documentElement.style.setProperty('--mask-radius', '200px');
+        setTimeout(() => {
+          document.documentElement.style.setProperty('--mask-radius', '150px');
+        }, 400);
+      }
     }
+
+    // Default to center if initial
+    updateCoordinates(window.innerWidth * 0.5, window.innerHeight * 0.35);
 
     window.addEventListener('mousemove', (e) => {
       updateCoordinates(e.clientX, e.clientY);
@@ -476,7 +487,7 @@
 
     window.addEventListener('touchstart', (e) => {
       if (e.touches && e.touches[0]) {
-        updateCoordinates(e.touches[0].clientX, e.touches[0].clientY);
+        updateCoordinates(e.touches[0].clientX, e.touches[0].clientY, true);
       }
     }, { passive: true });
 
@@ -516,31 +527,26 @@
       { id: 'town5', name: 'Sunrise Cove', ratio: 1.0 }
     ];
 
-    function updateMapScroll() {
-      const rect = mapSection.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      // Start calculating when map enters screen, finish when scrolled past
-      const start = windowHeight * 0.8;
-      const end = -rect.height * 0.3;
-      const progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end)));
+    function applyMapProgress(progress) {
+      const clamped = Math.max(0, Math.min(1, progress));
 
       // 1. Scrub SVG stroke
-      const currentOffset = pathLength * (1 - progress);
+      const currentOffset = pathLength * (1 - clamped);
       routeActivePath.style.strokeDashoffset = `${currentOffset}`;
 
       // 2. Position traveler paper boat along path
-      const currentLength = progress * pathLength;
+      const currentLength = clamped * pathLength;
       const point = routeActivePath.getPointAtLength(currentLength);
       
       // Calculate slight tangent angle for boat orientation
-      const nextPoint = routeActivePath.getPointAtLength(Math.min(pathLength, currentLength + 2));
+      const nextLength = Math.min(pathLength, currentLength + 3);
+      const nextPoint = routeActivePath.getPointAtLength(nextLength);
       const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) * (180 / Math.PI);
 
       travelerGroup.setAttribute('transform', `translate(${point.x}, ${point.y}) rotate(${angle * 0.4})`);
 
       // 3. Update Progress Bar & Next Stop
-      const percent = Math.round(progress * 100);
+      const percent = Math.round(clamped * 100);
       routeProgressVal.textContent = `${percent}%`;
 
       // 4. Towns lighting up & chime triggering
@@ -548,7 +554,7 @@
         const townEl = document.getElementById(town.id);
         if (!townEl) return;
 
-        if (progress >= town.ratio - 0.05) {
+        if (clamped >= town.ratio - 0.05) {
           if (!townEl.classList.contains('active')) {
             townEl.classList.add('active');
             AudioEngine.playTownArrival();
@@ -557,19 +563,44 @@
           townEl.classList.remove('active');
         }
 
-        if (progress < town.ratio && (!towns[index - 1] || progress >= towns[index - 1].ratio)) {
+        if (clamped < town.ratio && (!towns[index - 1] || clamped >= towns[index - 1].ratio)) {
           nextStopLabel.textContent = town.name;
         }
       });
 
-      if (progress >= 0.98) {
+      if (clamped >= 0.98) {
         nextStopLabel.textContent = "Sunrise Cove Reached! ☀️";
       }
+    }
+
+    // Scroll listener fallback & synchronization
+    function updateMapScroll() {
+      const rect = mapSection.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      // Start calculating when map top reaches 80% viewport, finish when bottom reaches 20% viewport
+      const totalScrollDistance = rect.height + windowHeight * 0.6;
+      const currentScrolled = (windowHeight * 0.8) - rect.top;
+      const progress = currentScrolled / totalScrollDistance;
+
+      applyMapProgress(progress);
     }
 
     window.addEventListener('scroll', updateMapScroll, { passive: true });
     window.addEventListener('resize', updateMapScroll);
     updateMapScroll();
+
+    // If GSAP ScrollTrigger is available, use it to ensure 60fps scrub
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.create({
+        trigger: '#map',
+        start: 'top 80%',
+        end: 'bottom 30%',
+        scrub: true,
+        onUpdate: (self) => applyMapProgress(self.progress)
+      });
+    }
   }
 
   /* ==========================================================================

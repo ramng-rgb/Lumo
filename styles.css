@@ -275,13 +275,13 @@ body.lullaby-sleeping-mode {
   z-index: 40;
   /* Mask following mouse cursor coordinate */
   -webkit-mask-image: radial-gradient(
-    circle 150px at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    circle var(--mask-radius, 150px) at var(--mouse-x, -999px) var(--mouse-y, -999px),
     rgba(0, 0, 0, 1) 0%,
     rgba(0, 0, 0, 0.7) 45%,
     rgba(0, 0, 0, 0) 100%
   );
   mask-image: radial-gradient(
-    circle 150px at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    circle var(--mask-radius, 150px) at var(--mouse-x, -999px) var(--mouse-y, -999px),
     rgba(0, 0, 0, 1) 0%,
     rgba(0, 0, 0, 0.7) 45%,
     rgba(0, 0, 0, 0) 100%
