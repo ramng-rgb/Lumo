@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumo's Dream Delivery Service | Original Baby Moon-Cloud</title>
+  <meta name="description" content="Meet Lumo, the baby moon-cloud delivering glowing dreams in paper boats to sleeping towns before sunrise. An interactive early-web inspired portfolio.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
+  
+  <!-- Google Fonts: Fredoka (display), Nunito (body), VT323 (retro pixel) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&family=VT323&display=swap" rel="stylesheet">
+  
+  <!-- GSAP & ScrollTrigger CDN (Credited in footer) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="sky-journey">
+  <!-- Screen reader skip link -->
+  <a href="#main-content" class="skip-link">Skip to main dreams</a>
+
+  <!-- Fixed Top Retro Header & Audio Controls -->
+  <header class="retro-header" role="banner">
+    <div class="header-inner">
+      <button class="logo-badge" id="logoBtn" aria-label="Lumo Dream Service home. Tap 3 times for a secret!">
+        <span class="logo-icon" aria-hidden="true">🌙</span>
+        <span class="logo-text">Lumo's Dream Service</span>
+        <span class="logo-chip">v1.0 baby-web</span>
+      </button>
+
+      <!-- Live resolution badge for Responsive Chaos Mode -->
+      <div class="screen-size-badge" id="screenBadge" aria-live="polite">
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span id="screenDimensions">390×844</span> · Lumo adapted!
+      </div>
+
+      <!-- Audio Mute / Unmute Toggle Button -->
+      <div class="header-controls">
+        <button id="muteToggle" class="sound-toggle-btn" aria-label="Sound is muted. Click or press space to enable cozy chimes and lullabies" aria-pressed="false">
+          <span class="sound-icon" id="soundIcon" aria-hidden="true">🔇</span>
+          <span class="sound-text" id="soundText">Sound: OFF</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Scrolling Early-Web Ticker Marquee -->
+    <div class="delivery-ticker" aria-label="Live Dream Delivery Feed">
+      <div class="ticker-content" id="tickerText">
+        <span>✨ NOW DELIVERING: Cloud Pancakes to Slumberton</span>
+        <span class="ticker-divider">✦</span>
+        <span>📖 Starlight Stories to Dewdrop Hollow</span>
+        <span class="ticker-divider">✦</span>
+        <span>🎹 Marshmallow Chimes to Pillow Peak</span>
+        <span class="ticker-divider">✦</span>
+        <span>⛵ Paper Boat #4,821 en route to Sunrise Cove</span>
+        <span class="ticker-divider">✦</span>
+        <span>💤 1,204+ dreams safely tucked in tonight</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Nightlight Flashlight Mask Layer -->
+  <div class="nightlight-canvas-layer" id="nightlightLayer" aria-hidden="true">
+    <div class="secret-skies" id="secretSkies">
+      <!-- Hidden constellations and sleeping friends revealed only by flashlight -->
+      <div class="hidden-item constellation teapot" style="top: 18%; left: 15%;">
+        <svg viewBox="0 0 100 80" class="constellation-svg">
+          <polyline points="20,50 40,20 70,25 85,55 60,65 25,60 20,50" stroke="#ffd36b" stroke-dasharray="3,3" fill="none" stroke-width="1.5" />
+          <circle cx="20" cy="50" r="3" fill="#fff7ee" />
+          <circle cx="40" cy="20" r="4" fill="#ffd36b" />
+          <circle cx="70" cy="25" r="3.5" fill="#fff7ee" />
+          <circle cx="85" cy="55" r="4" fill="#ffd36b" />
+          <circle cx="60" cy="65" r="3" fill="#ffe39a" />
+          <text x="35" y="75" fill="#ffd36b" font-family="VT323" font-size="14">Teapot of Dreams</text>
+        </svg>
+      </div>
+
+      <div class="hidden-item sleeper bear" style="top: 42%; right: 12%;">
+        <svg viewBox="0 0 80 60" class="sleeper-svg">
+          <ellipse cx="40" cy="35" rx="25" ry="18" fill="#ffc2d4" opacity="0.9"/>
+          <circle cx="25" cy="22" r="7" fill="#ffc2d4"/>
+          <circle cx="55" cy="22" r="7" fill="#ffc2d4"/>
+          <path d="M 32 35 Q 36 38 40 35" stroke="#3b1f4a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M 44 35 Q 48 38 52 35" stroke="#3b1f4a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="42" cy="40" r="3" fill="#3b1f4a"/>
+          <text x="24" y="56" fill="#ffe39a" font-family="VT323" font-size="13">Snoozing Cub 💤</text>
+        </svg>
+      </div>
+
+      <div class="hidden-item constellation bunny" style="top: 68%; left: 22%;">
+        <svg viewBox="0 0 90 70" class="constellation-svg">
+          <polyline points="25,55 35,40 50,35 65,45 60,60 35,62" stroke="#bfeedd" stroke-dasharray="2,2" fill="none" stroke-width="1.5" />
+          <line x1="35" y1="40" x2="30" y2="15" stroke="#bfeedd" stroke-width="1.5" stroke-dasharray="2,2" />
+          <line x1="50" y1="35" x2="48" y2="12" stroke="#bfeedd" stroke-width="1.5" stroke-dasharray="2,2" />
+          <circle cx="30" cy="15" r="3" fill="#fff7ee" />
+          <circle cx="48" cy="12" r="3" fill="#ffd36b" />
+          <circle cx="65" cy="45" r="4" fill="#bfeedd" />
+          <text x="20" y="68" fill="#bfeedd" font-family="VT323" font-size="13">Moon Bunny Constellation</text>
+        </svg>
+      </div>
+
+      <!-- Hidden Sleeping Star Easter Egg Target -->
+      <button class="hidden-item sleeping-star-egg" id="sleepingStarBtn" style="bottom: 12%; right: 25%;" aria-label="A tiny sleeping star in the night sky. Tap 3 times to tuck Lumo in!">
+        <svg viewBox="0 0 60 60" class="sleeping-star-svg">
+          <polygon points="30,5 37,22 55,22 41,33 46,50 30,39 14,50 19,33 5,22 23,22" fill="#ffd36b" stroke="#ffe39a" stroke-width="2"/>
+          <!-- Sleepy eyes on the star -->
+          <path d="M 23 27 Q 26 30 29 27" stroke="#3b1f4a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M 33 27 Q 36 30 39 27" stroke="#3b1f4a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <circle cx="21" cy="30" r="1.5" fill="#ffc2d4"/>
+          <circle cx="41" cy="30" r="1.5" fill="#ffc2d4"/>
+        </svg>
+        <span class="star-egg-tip">Sleeping Star ✦</span>
+      </button>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <!-- ==============================================
+         SECTION 1: HERO - "WHAT THEY ARE"
+         Strict Word Count <= 150 words
+         ============================================== -->
+    <section id="hero" class="section hero-section" aria-labelledby="hero-title">
+      <div class="twinkle-stars" aria-hidden="true"></div>
+
+      <div class="container hero-container">
+        <!-- Floating retro badges -->
+        <div class="retro-badge-row">
+          <span class="retro-pill">★ 100% Original Baby Moon-Cloud</span>
+          <span class="retro-pill highlight">✦ Handcrafted with Soul</span>
+          <span class="retro-pill">☁️ Dream Courier #001</span>
+        </div>
+
+        <h1 id="hero-title" class="hero-title">
+          <span class="title-sub">Welcome to</span>
+          <span class="title-main">Lumo's Dream Delivery Service</span>
+        </h1>
+
+        <p class="hero-tagline">“Sleep tight. I’m on my way.”</p>
+
+        <!-- Interactive Lumo Character Stage -->
+        <div class="lumo-stage" id="lumoStage" role="region" aria-label="Interactive baby moon-cloud Lumo">
+          <div class="nightlight-aura" id="nightlightAura" aria-hidden="true"></div>
+
+          <!-- Hand-crafted Original SVG of Lumo -->
+          <div class="lumo-character" id="lumoChar" tabindex="0" role="button" aria-label="Lumo the baby moon cloud. Click or tap to tickle and hear a giggle!">
+            <svg viewBox="0 0 320 300" class="lumo-svg" id="lumoSvg" aria-hidden="true">
+              <defs>
+                <!-- Nightlight belly glow gradient -->
+                <radialGradient id="bellyGlowGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#ffe39a" stop-opacity="0.95" />
+                  <stop offset="60%" stop-color="#ffd36b" stop-opacity="0.65" />
+                  <stop offset="100%" stop-color="#ffc2d4" stop-opacity="0" />
+                </radialGradient>
+                <!-- Cloud body soft shading -->
+                <linearGradient id="cloudBodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="85%" stop-color="#fff7ee" />
+                  <stop offset="100%" stop-color="#e8ecf8" />
+                </linearGradient>
+                <!-- Golden crescent curl gradient -->
+                <linearGradient id="crescentCurlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffd36b" />
+                  <stop offset="100%" stop-color="#ffe39a" />
+                </linearGradient>
+              </defs>
+
+              <!-- Drop shadow cloud base -->
+              <ellipse cx="160" cy="275" rx="90" ry="14" fill="#1b122e" opacity="0.35" class="lumo-shadow"/>
+
+              <!-- Main squishy cloud body (composed of soft organic lobes) -->
+              <g class="lumo-body-group" id="lumoBody">
+                <!-- Outer cloud puffs -->
+                <path d="M 95 210 
+                         C 60 210, 40 180, 50 145 
+                         C 35 110, 65 75, 105 75 
+                         C 125 45, 175 40, 205 65 
+                         C 235 50, 275 75, 275 115 
+                         C 295 145, 280 195, 245 210 
+                         C 225 235, 180 245, 155 230 
+                         C 135 240, 105 235, 95 210 Z" 
+                      fill="url(#cloudBodyGrad)" 
+                      stroke="#dbe3f5" 
+                      stroke-width="3.5" 
+                      stroke-linejoin="round"
+                      class="lumo-cloud-path" />
+
+                <!-- Glowing Nightlight Belly -->
+                <circle cx="160" cy="180" r="48" fill="url(#bellyGlowGrad)" class="lumo-belly" id="lumoBelly" />
+                <!-- Subtle belly star emblem -->
+                <polygon points="160,165 163,174 172,175 165,181 167,190 160,185 153,190 155,181 148,175 157,174" fill="#ffd36b" opacity="0.8" class="belly-star"/>
+
+                <!-- Crescent-moon curl on head -->
+                <g class="lumo-moon-curl" id="moonCurl" transform="translate(142, 28) rotate(-10)">
+                  <path d="M 22 2 
+                           C 38 12, 38 38, 18 48 
+                           C 8 53, -2 48, -2 48 
+                           C 14 42, 18 24, 8 10 
+                           C 4 6, 22 2, 22 2 Z" 
+                        fill="url(#crescentCurlGrad)" 
+                        stroke="#e5b43b" 
+                        stroke-width="2.5" />
+                  <circle cx="20" cy="6" r="3" fill="#ffffff" opacity="0.7"/>
+                </g>
+
+                <!-- Left Stubby Arm -->
+                <ellipse cx="62" cy="165" rx="14" ry="11" transform="rotate(-20 62 165)" fill="#fff7ee" stroke="#dbe3f5" stroke-width="3" class="lumo-arm arm-left"/>
+                <!-- Right Stubby Arm (holds tiny glowing paper parcel) -->
+                <g class="lumo-arm arm-right" id="armRight">
+                  <ellipse cx="258" cy="165" rx="14" ry="11" transform="rotate(20 258 165)" fill="#fff7ee" stroke="#dbe3f5" stroke-width="3"/>
+                  <!-- Tiny Paper Boat Parcel -->
+                  <polygon points="268,165 284,165 276,177" fill="#ffe39a" stroke="#e5b43b" stroke-width="1.5"/>
+                  <polygon points="276,155 276,165 282,165" fill="#ffc2d4"/>
+                </g>
+
+                <!-- Rosy Cheeks -->
+                <ellipse cx="106" cy="148" rx="13" ry="8" fill="#ffc2d4" class="lumo-blush blush-left" id="blushLeft"/>
+                <ellipse cx="214" cy="148" rx="13" ry="8" fill="#ffc2d4" class="lumo-blush blush-right" id="blushRight"/>
+
+                <!-- Eyes Container (Pupils follow mouse) -->
+                <g class="lumo-eyes-group" id="lumoEyes">
+                  <!-- Left Eye Socket -->
+                  <ellipse cx="120" cy="132" rx="12" ry="15" fill="#ffffff" stroke="#dbe3f5" stroke-width="1.5" class="eye-white eye-left-socket"/>
+                  <!-- Left Pupil -->
+                  <g class="eye-pupil" id="pupilLeft" transform="translate(120, 132)">
+                    <ellipse cx="0" cy="0" rx="8" ry="10" fill="#2a1e3b"/>
+                    <circle cx="-2.5" cy="-3.5" r="3" fill="#ffffff"/>
+                    <circle cx="2.5" cy="3" r="1.5" fill="#ffffff"/>
+                  </g>
+
+                  <!-- Right Eye Socket -->
+                  <ellipse cx="200" cy="132" rx="12" ry="15" fill="#ffffff" stroke="#dbe3f5" stroke-width="1.5" class="eye-white eye-right-socket"/>
+                  <!-- Right Pupil -->
+                  <g class="eye-pupil" id="pupilRight" transform="translate(200, 132)">
+                    <ellipse cx="0" cy="0" rx="8" ry="10" fill="#2a1e3b"/>
+                    <circle cx="-2.5" cy="-3.5" r="3" fill="#ffffff"/>
+                    <circle cx="2.5" cy="3" r="1.5" fill="#ffffff"/>
+                  </g>
+
+                  <!-- Sleeping/Blinking eyelids overlay -->
+                  <path d="M 108 132 Q 120 144 132 132" stroke="#2a1e3b" stroke-width="3" fill="none" stroke-linecap="round" class="eye-closed eye-closed-left" style="display:none;" />
+                  <path d="M 188 132 Q 200 144 212 132" stroke="#2a1e3b" stroke-width="3" fill="none" stroke-linecap="round" class="eye-closed eye-closed-right" style="display:none;" />
+                </g>
+
+                <!-- Cute Mouth (Smiles, opens on giggle, yawns when idle) -->
+                <g class="lumo-mouth-group" id="lumoMouth">
+                  <!-- Gentle default happy smile -->
+                  <path d="M 152 145 Q 160 153 168 145" stroke="#3b1f4a" stroke-width="3" fill="none" stroke-linecap="round" id="mouthSmile"/>
+                  <!-- Giggle / Yawn open mouth -->
+                  <ellipse cx="160" cy="150" rx="8" ry="10" fill="#3b1f4a" id="mouthOpen" style="display: none;"/>
+                  <path d="M 156 153 Q 160 158 164 153" fill="#ffc2d4" id="mouthTongue" style="display: none;"/>
+                </g>
+
+                <!-- Floating ZZZ container for sleepy moments -->
+                <g class="floating-zzz" id="floatingZzz" aria-hidden="true"></g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Lumo Interaction Callout / Status Bubble -->
+          <div class="lumo-dialog-bubble" id="lumoStatus" aria-live="polite">
+            <span class="bubble-heart" aria-hidden="true">💛</span>
+            <span class="bubble-text" id="lumoStatusText">Psst! Tap me to tickle, or hover to say hi!</span>
+          </div>
+        </div>
+
+        <!-- Personality Tags & Call to Actions -->
+        <div class="personality-pills" aria-label="Lumo personality highlights">
+          <div class="pill-card">
+            <span class="pill-icon">🌙</span>
+            <span class="pill-label">Shy & Curious</span>
+            <span class="pill-desc">Hums softly when calm</span>
+          </div>
+          <div class="pill-card">
+            <span class="pill-icon">✨</span>
+            <span class="pill-label">Nightlight Belly</span>
+            <span class="pill-desc">Warm glow keeps monsters away</span>
+          </div>
+          <div class="pill-card">
+            <span class="pill-icon">⛵</span>
+            <span class="pill-label">Dream Courier</span>
+            <span class="pill-desc">Goal: 1,000,000 peaceful sleeps</span>
+          </div>
+        </div>
+
+        <!-- Wake / Tickle Button & Quick Jump -->
+        <div class="hero-actions">
+          <button class="retro-btn primary" id="tickleBtn">
+            <span class="btn-sparkle" aria-hidden="true">✨</span> Tickle Lumo!
+          </button>
+          <a href="#about" class="retro-btn secondary">
+            <span>Read Baby Bio ↓</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SECTION 2: ABOUT / CHARACTER SHEET
+         5-Point Sheet in Retro Trading Card Style
+         Strict Word Count <= 150 words
+         ============================================== -->
+    <section id="about" class="section about-section" aria-labelledby="about-title">
+      <div class="container">
+        <div class="section-tag">★ Character Sheet #001 ★</div>
+        <h2 id="about-title" class="section-heading">Baby Moon-Cloud Dossier</h2>
+
+        <!-- Retro Trading Card Container -->
+        <div class="trading-card-wrapper">
+          <article class="trading-card" aria-label="Official Lumo Collectible Trading Card">
+            <header class="card-header">
+              <div class="card-type-chip">HOLOGRAM FIRST EDITION</div>
+              <div class="card-hp">HP: 100/100 · COZINESS: MAX</div>
+            </header>
+
+            <div class="card-media">
+              <div class="card-illustration">
+                <!-- Mini Lumo Portrait -->
+                <svg viewBox="0 0 140 120" class="mini-lumo-art" aria-hidden="true">
+                  <ellipse cx="70" cy="70" rx="45" ry="32" fill="#fff7ee" stroke="#2a2a5e" stroke-width="2.5"/>
+                  <circle cx="70" cy="72" r="18" fill="#ffd36b" opacity="0.6"/>
+                  <path d="M 64 30 C 74 36, 74 50, 62 56 C 58 59, 52 57, 52 57 C 60 53, 62 42, 56 34 Z" fill="#ffd36b" stroke="#2a2a5e" stroke-width="1.5"/>
+                  <circle cx="56" cy="65" r="4" fill="#2a1e3b"/>
+                  <circle cx="84" cy="65" r="4" fill="#2a1e3b"/>
+                  <ellipse cx="48" cy="72" rx="6" ry="4" fill="#ffc2d4"/>
+                  <ellipse cx="92" cy="72" rx="6" ry="4" fill="#ffc2d4"/>
+                  <path d="M 66 73 Q 70 78 74 73" stroke="#2a1e3b" stroke-width="2" fill="none" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="card-nameplate">
+                <span class="card-no">NO. 001</span>
+                <span class="card-name">Lumo</span>
+                <span class="card-species">Baby Moon-Cloud</span>
+              </div>
+            </div>
+
+            <!-- The Required 5-Point Character Sheet -->
+            <dl class="card-stats-list">
+              <div class="stat-row">
+                <dt class="stat-term">1. Name</dt>
+                <dd class="stat-def"><strong>Lumo</strong> (they/them)</dd>
+              </div>
+
+              <div class="stat-row">
+                <dt class="stat-term">2. What they are</dt>
+                <dd class="stat-def">A round, squishy baby moon-cloud with a golden crescent curl, rosy cheeks, tiny stubby arms, and a warm glowing nightlight belly.</dd>
+              </div>
+
+              <div class="stat-row">
+                <dt class="stat-term">3. What they do</dt>
+                <dd class="stat-def">Runs the <strong>Dream Delivery Service</strong>, packing sweet glowing dreams into paper-boat parcels and floating them to sleeping towns before sunrise.</dd>
+              </div>
+
+              <div class="stat-row">
+                <dt class="stat-term">4. Their story</dt>
+                <dd class="stat-def">Born from the final wisp of a lost bedtime lullaby, Lumo journeyed across the skies to deliver comforting dreams to every sleeping child. Goal: 1,000,000 dreams!</dd>
+              </div>
+
+              <div class="stat-row highlight-tagline">
+                <dt class="stat-term">5. Tagline</dt>
+                <dd class="stat-def"><em>“Sleep tight. I’m on my way.”</em></dd>
+              </div>
+            </dl>
+
+            <footer class="card-footer">
+              <span class="holo-stamp">✦ GENUINE DREAM CORP CERTIFIED ✦</span>
+              <span class="tilt-hint">Hover or tilt card</span>
+            </footer>
+          </article>
+
+          <!-- Retro sticky notes on scrapbook desk -->
+          <aside class="card-notes" aria-label="Lumo quirks and habits">
+            <div class="sticky-note yellow">
+              <div class="pin" aria-hidden="true">📌</div>
+              <h4>Quirk Log:</h4>
+              <ul>
+                <li>Hums like a purring kitten when happy</li>
+                <li>Yawns if left alone for 8 seconds</li>
+                <li>Giggles when tickled on the belly</li>
+              </ul>
+            </div>
+
+            <div class="sticky-note mint">
+              <div class="pin" aria-hidden="true">📌</div>
+              <h4>Favorite Snack:</h4>
+              <p>Starlight sprinkled over warm steamed milk foam.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SECTION 3: STORY - "THEIR STORY"
+         4 Illustrated Scenes with Scroll Parallax
+         Captions <= 25 words each (Total <= 100 words)
+         ============================================== -->
+    <section id="story" class="section story-section" aria-labelledby="story-title">
+      <div class="container">
+        <div class="section-tag">★ Chapter Scroll ★</div>
+        <h2 id="story-title" class="section-heading">How Lumo Took Flight</h2>
+        <p class="section-subtext">Scroll through the four quiet moments that started the Dream Delivery Service.</p>
+
+        <!-- 4 Illustrated Scenes Container -->
+        <div class="story-timeline" id="storyTimeline">
+          <!-- Scene 1 -->
+          <article class="story-scene-card" data-scene="1">
+            <div class="scene-illustration">
+              <svg viewBox="0 0 280 180" class="scene-svg" aria-label="Illustration: A glowing lullaby wisp floats into twilight clouds">
+                <!-- Twilight background -->
+                <rect width="280" height="180" rx="16" fill="#2a1f42"/>
+                <!-- Crescent moon & stars -->
+                <path d="M 220 30 C 235 40, 235 60, 218 70 C 210 74, 202 72, 202 72 C 212 66, 215 54, 208 42 Z" fill="#ffd36b"/>
+                <circle cx="60" cy="40" r="1.5" fill="#fff7ee"/>
+                <circle cx="110" cy="25" r="2" fill="#ffd36b"/>
+                <circle cx="160" cy="50" r="1.5" fill="#fff7ee"/>
+                <!-- Wisp of lullaby notes transforming into baby cloud -->
+                <path d="M 30 140 Q 80 110 130 120 T 210 90" stroke="#ffd36b" stroke-width="2.5" stroke-dasharray="4,4" fill="none"/>
+                <!-- Musical notes -->
+                <text x="75" y="105" fill="#ffd36b" font-size="16">♪</text>
+                <text x="145" y="95" fill="#ffe39a" font-size="18">♫</text>
+                <!-- Baby Lumo form emerging -->
+                <ellipse cx="210" cy="95" rx="35" ry="24" fill="#fff7ee"/>
+                <circle cx="210" cy="98" r="12" fill="#ffd36b" opacity="0.6"/>
+                <circle cx="204" cy="92" r="2.5" fill="#2a1e3b"/>
+                <circle cx="218" cy="92" r="2.5" fill="#2a1e3b"/>
+                <ellipse cx="198" cy="98" rx="4" ry="2.5" fill="#ffc2d4"/>
+                <ellipse cx="224" cy="98" rx="4" ry="2.5" fill="#ffc2d4"/>
+              </svg>
+            </div>
+            <div class="scene-caption-box">
+              <span class="scene-num">SCENE 01</span>
+              <h3 class="scene-title">The Lullaby Wisp</h3>
+              <!-- Caption <= 25 words (Current: 21 words) -->
+              <p class="scene-text">Born from the last tender note of a bedtime song drifting past the sleepy stars into the quiet twilight sky.</p>
+            </div>
+          </article>
+
+          <!-- Scene 2 -->
+          <article class="story-scene-card" data-scene="2">
+            <div class="scene-illustration">
+              <svg viewBox="0 0 280 180" class="scene-svg" aria-label="Illustration: Lumo looking down lonely at a dark sleeping world">
+                <rect width="280" height="180" rx="16" fill="#1d1735"/>
+                <!-- Drifting dark clouds -->
+                <path d="M 20 70 Q 50 50 90 70 T 170 65 T 250 80" stroke="#3b2b5f" stroke-width="12" stroke-linecap="round" fill="none"/>
+                <!-- Sleeping dark rooftops below -->
+                <polygon points="40,180 60,150 80,180" fill="#120c24"/>
+                <polygon points="120,180 150,140 180,180" fill="#140e28"/>
+                <polygon points="210,180 235,145 260,180" fill="#120c24"/>
+                <!-- Lonely Lumo floating with glowing belly searching -->
+                <ellipse cx="140" cy="80" rx="36" ry="26" fill="#fff7ee"/>
+                <circle cx="140" cy="84" r="14" fill="#ffd36b" opacity="0.8"/>
+                <!-- Curious questioning eyes -->
+                <circle cx="134" cy="78" r="3" fill="#2a1e3b"/>
+                <circle cx="148" cy="78" r="3" fill="#2a1e3b"/>
+                <path d="M 138 86 Q 141 84 144 86" stroke="#2a1e3b" stroke-width="1.5" fill="none"/>
+                <!-- Teardrop sparkle -->
+                <polygon points="175,65 178,72 185,75 178,78 175,85 172,78 165,75 172,72" fill="#ffd36b"/>
+              </svg>
+            </div>
+            <div class="scene-caption-box">
+              <span class="scene-num">SCENE 02</span>
+              <h3 class="scene-title">The Lonely First Night</h3>
+              <!-- Caption <= 25 words (Current: 21 words) -->
+              <p class="scene-text">Floating through cold, silent clouds alone, wondering where forgotten lullabies go when bedroom lights switch off across dark valleys.</p>
+            </div>
+          </article>
+
+          <!-- Scene 3 -->
+          <article class="story-scene-card" data-scene="3">
+            <div class="scene-illustration">
+              <svg viewBox="0 0 280 180" class="scene-svg" aria-label="Illustration: Lumo discovers floating jars of glowing dreams">
+                <rect width="280" height="180" rx="16" fill="#1b1c3e"/>
+                <!-- Floating dream bubbles -->
+                <circle cx="70" cy="60" r="22" fill="#ffc2d4" opacity="0.35" stroke="#ffc2d4" stroke-width="1.5"/>
+                <text x="62" y="66" font-size="16">🥞</text>
+
+                <circle cx="210" cy="55" r="24" fill="#bfeedd" opacity="0.35" stroke="#bfeedd" stroke-width="1.5"/>
+                <text x="202" y="62" font-size="16">📚</text>
+
+                <circle cx="140" cy="35" r="20" fill="#ffe39a" opacity="0.35" stroke="#ffe39a" stroke-width="1.5"/>
+                <text x="132" y="42" font-size="16">🎹</text>
+
+                <!-- Happy surprised Lumo -->
+                <ellipse cx="140" cy="115" rx="40" ry="28" fill="#fff7ee"/>
+                <circle cx="140" cy="120" r="15" fill="#ffd36b" opacity="0.9"/>
+                <!-- Big happy sparkle eyes -->
+                <circle cx="132" cy="112" r="4.5" fill="#2a1e3b"/>
+                <circle cx="130" cy="110" r="1.5" fill="#ffffff"/>
+                <circle cx="150" cy="112" r="4.5" fill="#2a1e3b"/>
+                <circle cx="148" cy="110" r="1.5" fill="#ffffff"/>
+                <ellipse cx="122" cy="118" rx="6" ry="3.5" fill="#ffc2d4"/>
+                <ellipse cx="160" cy="118" rx="6" ry="3.5" fill="#ffc2d4"/>
+                <ellipse cx="141" cy="122" rx="4" ry="5" fill="#3b1f4a"/>
+              </svg>
+            </div>
+            <div class="scene-caption-box">
+              <span class="scene-num">SCENE 03</span>
+              <h3 class="scene-title">Discovering the Dreams</h3>
+              <!-- Caption <= 25 words (Current: 20 words) -->
+              <p class="scene-text">Lumo discovered that every sleeping child created sweet, fragile dreams needing safe passage past shadows into happy morning smiles.</p>
+            </div>
+          </article>
+
+          <!-- Scene 4 -->
+          <article class="story-scene-card" data-scene="4">
+            <div class="scene-illustration">
+              <svg viewBox="0 0 280 180" class="scene-svg" aria-label="Illustration: Lumo folding a paper boat parcel and sending it toward a sleeping cottage">
+                <rect width="280" height="180" rx="16" fill="#231942"/>
+                <!-- Distant warm dawn glow -->
+                <linearGradient id="dawnGlow" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stop-color="#ffaa88" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#231942" stop-opacity="0"/>
+                </linearGradient>
+                <rect y="100" width="280" height="80" fill="url(#dawnGlow)"/>
+
+                <!-- Paper boat soaring through night air -->
+                <g transform="translate(60, 65) rotate(-8)">
+                  <polygon points="10,25 50,25 38,40 22,40" fill="#fff7ee" stroke="#ffd36b" stroke-width="1.5"/>
+                  <polygon points="30,8 30,25 45,25" fill="#ffd36b"/>
+                  <circle cx="30" cy="8" r="4" fill="#ffe39a"/>
+                  <!-- Glowing trail -->
+                  <path d="M 0 35 Q -20 38 -40 32" stroke="#ffd36b" stroke-width="1.5" stroke-dasharray="2,2" fill="none"/>
+                </g>
+
+                <!-- Sleeping cottage with chimney smoke -->
+                <rect x="200" y="125" width="45" height="35" fill="#18112d"/>
+                <polygon points="195,125 222,100 250,125" fill="#3b1f4a"/>
+                <rect x="215" y="135" width="12" height="12" fill="#ffd36b" opacity="0.8"/>
+                <path d="M 235 105 Q 242 90 238 75" stroke="#ffe39a" stroke-width="1.5" stroke-dasharray="2,2" fill="none"/>
+
+                <!-- Proud Lumo waving stubby arm -->
+                <ellipse cx="140" cy="110" rx="35" ry="24" fill="#fff7ee"/>
+                <circle cx="140" cy="114" r="14" fill="#ffd36b" opacity="0.8"/>
+                <circle cx="134" cy="106" r="3" fill="#2a1e3b"/>
+                <circle cx="146" cy="106" r="3" fill="#2a1e3b"/>
+                <ellipse cx="168" cy="98" rx="8" ry="6" fill="#fff7ee" stroke="#dbe3f5" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="scene-caption-box">
+              <span class="scene-num">SCENE 04</span>
+              <h3 class="scene-title">The First Delivery</h3>
+              <!-- Caption <= 25 words (Current: 21 words) -->
+              <p class="scene-text">Folding the first golden paper-boat and lighting its belly lantern, Lumo launched the service. Dream #1 had safely arrived.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SECTION 4: WORK - "WHAT THEY DO"
+         Dream Workshop: 3 Projects + Bonus Nightlight
+         Retro Window Chrome Frame
+         Strict Word Count <= 150 words
+         ============================================== -->
+    <section id="work" class="section workshop-section" aria-labelledby="work-title">
+      <div class="container">
+        <div class="section-tag">★ Dream Workshop ★</div>
+        <h2 id="work-title" class="section-heading">Handmade Dream Parcels</h2>
+        <p class="section-subtext">Click any parcel to unseal its animated dream scene inside the DreamOS viewer.</p>
+
+        <!-- Retro OS Window Chrome Frame -->
+        <div class="retro-window-frame" role="region" aria-label="DreamOS 98 Window Viewer">
+          <header class="window-titlebar">
+            <div class="window-controls" aria-hidden="true">
+              <span class="win-btn close" title="Close"></span>
+              <span class="win-btn min" title="Minimize"></span>
+              <span class="win-btn max" title="Maximize"></span>
+            </div>
+            <div class="window-title">DreamOS v2.4 — [C:\Lumo\Workshop\Parcels.exe]</div>
+            <div class="window-status-pill">STATUS: PACKING DREAMS</div>
+          </header>
+
+          <div class="window-body">
+            <!-- 3 Dream Projects Grid -->
+            <div class="parcels-grid" role="list">
+              <!-- Project 1: Flying Pancake Dream -->
+              <article class="parcel-card" role="listitem" tabindex="0" data-project="pancake">
+                <div class="parcel-lid">
+                  <span class="parcel-stamp">PARCEL #01</span>
+                  <span class="parcel-icon">🥞</span>
+                </div>
+                <div class="parcel-content">
+                  <h3 class="parcel-name">The Flying Pancake Dream</h3>
+                  <p class="parcel-pitch">Warm, fluffy flapjacks drifting across starlit skies with golden syrup butter clouds.</p>
+                  <button class="open-parcel-btn" aria-expanded="false" aria-controls="modal-pancake">
+                    <span>Unseal Parcel</span> ✦
+                  </button>
+                </div>
+              </article>
+
+              <!-- Project 2: Underwater Library Dream -->
+              <article class="parcel-card" role="listitem" tabindex="0" data-project="library">
+                <div class="parcel-lid">
+                  <span class="parcel-stamp">PARCEL #02</span>
+                  <span class="parcel-icon">🌊</span>
+                </div>
+                <div class="parcel-content">
+                  <h3 class="parcel-name">The Underwater Library Dream</h3>
+                  <p class="parcel-pitch">Luminescent jellyfish floating between coral shelves holding bedtime storybooks.</p>
+                  <button class="open-parcel-btn" aria-expanded="false" aria-controls="modal-library">
+                    <span>Unseal Parcel</span> ✦
+                  </button>
+                </div>
+              </article>
+
+              <!-- Project 3: Marshmallow Piano Dream -->
+              <article class="parcel-card" role="listitem" tabindex="0" data-project="piano">
+                <div class="parcel-lid">
+                  <span class="parcel-stamp">PARCEL #03</span>
+                  <span class="parcel-icon">🎹</span>
+                </div>
+                <div class="parcel-content">
+                  <h3 class="parcel-name">The Marshmallow Piano Dream</h3>
+                  <p class="parcel-pitch">Squishy pastel musical keys that bounce softly and chime lullaby chords in your sleep.</p>
+                  <button class="open-parcel-btn" aria-expanded="false" aria-controls="modal-piano">
+                    <span>Unseal Parcel</span> ✦
+                  </button>
+                </div>
+              </article>
+            </div>
+
+            <!-- Bonus Real-Skill Gadget: Interactive CSS Nightlight Dial -->
+            <div class="workshop-gadget" aria-label="Interactive Nightlight Dimmer Gadget">
+              <div class="gadget-header">
+                <span class="gadget-badge">BONUS SKILL GADGET</span>
+                <h4>Lumo's Belly Glow Dimmer Dial</h4>
+              </div>
+              <div class="gadget-controls">
+                <label for="glowSlider" class="dimmer-label">Adjust Lumo's Nightlight Intensity:</label>
+                <div class="slider-wrapper">
+                  <span aria-hidden="true">🌙 Dim</span>
+                  <input type="range" id="glowSlider" min="20" max="100" value="80" class="retro-slider" aria-valuemin="20" aria-valuemax="100" aria-valuenow="80" aria-label="Nightlight glow intensity percentage">
+                  <span aria-hidden="true">☀️ Golden</span>
+                </div>
+                <span class="slider-val" id="glowVal">80% Warmth</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Animated Dream Modal Viewer (Accessible Dialog) -->
+        <dialog id="dreamModal" class="dream-modal" aria-labelledby="modalTitle" aria-modal="true">
+          <div class="modal-dialog-box">
+            <header class="modal-bar">
+              <span id="modalTitle" class="modal-title">Dream Preview</span>
+              <button id="closeModalBtn" class="modal-close-btn" aria-label="Close dream inspection window">✕</button>
+            </header>
+            <div class="modal-body-content">
+              <div class="modal-svg-stage" id="modalSvgStage" aria-live="polite">
+                <!-- Injected via JavaScript based on chosen dream -->
+              </div>
+              <div class="modal-text-box">
+                <h4 id="modalHeading">Dream Title</h4>
+                <p id="modalLine1">Line 1 of dream story</p>
+                <p id="modalLine2">Line 2 of dream story</p>
+                <button class="retro-btn primary" id="packDreamBtn">
+                  <span>Ship in Paper Boat ⛵</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </dialog>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SECTION 5: DREAM DELIVERY MAP (Tier 2 Hero Feature)
+         SVG Route Synced to Scroll + Towns Lighting Up
+         Strict Word Count <= 150 words
+         ============================================== -->
+    <section id="map" class="section map-section" aria-labelledby="map-title">
+      <div class="container">
+        <div class="section-tag">★ Tier 2 Standout Feature ★</div>
+        <h2 id="map-title" class="section-heading">The Night Delivery Route</h2>
+        <p class="section-subtext">Scroll down to guide Lumo's paper boat along the starlit route. Watch each village light up upon arrival!</p>
+
+        <!-- Route Progress & Delivery Stats Header -->
+        <div class="map-stats-bar">
+          <div class="map-stat-item">
+            <span class="stat-label">COURIER VESSEL:</span>
+            <span class="stat-value">Paper Boat #4,821</span>
+          </div>
+          <div class="map-stat-item">
+            <span class="stat-label">NEXT STOP:</span>
+            <span class="stat-value" id="nextStopLabel">Slumberton</span>
+          </div>
+          <div class="map-stat-item highlight">
+            <span class="stat-label">ROUTE PROGRESS:</span>
+            <span class="stat-value" id="routeProgressVal">0%</span>
+          </div>
+        </div>
+
+        <!-- The SVG Route Map Canvas Container -->
+        <div class="delivery-map-wrapper" id="deliveryMapWrapper">
+          <svg viewBox="0 0 900 480" class="delivery-map-svg" id="deliveryMapSvg" preserveAspectRatio="xMidYMid meet" aria-label="Interactive map showing Lumo's curved route through 5 fairytale sleeping towns">
+            <defs>
+              <!-- Star pattern -->
+              <radialGradient id="townGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffd36b" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#ffd36b" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Curving River of Starlight (Base path) -->
+            <path id="routeDashedBase" 
+                  d="M 60,380 
+                     C 160,340 180,180 280,190 
+                     C 380,200 420,380 520,360 
+                     C 620,340 660,140 760,160 
+                     C 810,170 840,240 860,250" 
+                  fill="none" 
+                  stroke="#3b2b5f" 
+                  stroke-width="8" 
+                  stroke-linecap="round" />
+
+            <!-- Active Glowing Progress Path (Stroke synced to scroll) -->
+            <path id="routeActivePath" 
+                  d="M 60,380 
+                     C 160,340 180,180 280,190 
+                     C 380,200 420,380 520,360 
+                     C 620,340 660,140 760,160 
+                     C 810,170 840,240 860,250" 
+                  fill="none" 
+                  stroke="#ffd36b" 
+                  stroke-width="5" 
+                  stroke-dasharray="10 8" 
+                  stroke-linecap="round" />
+
+            <!-- 5 Illustrated Towns Along Path -->
+            <!-- Town 1: Slumberton (Near start: 60, 380) -->
+            <g class="town-node active" id="town1" transform="translate(60, 380)">
+              <circle cx="0" cy="0" r="30" fill="url(#townGlow)" class="town-aura"/>
+              <!-- Cottage -->
+              <rect x="-18" y="-14" width="36" height="24" fill="#2a1f42" stroke="#dbe3f5" stroke-width="1.5"/>
+              <polygon points="-22,-14 0,-32 22,-14" fill="#ffc2d4"/>
+              <rect x="-8" y="-4" width="16" height="14" fill="#ffd36b" class="town-window"/>
+              <text x="0" y="28" text-anchor="middle" fill="#ffe39a" font-family="Fredoka" font-size="13" font-weight="600">1. Slumberton</text>
+            </g>
+
+            <!-- Town 2: Starfall Glade (Near 280, 190) -->
+            <g class="town-node" id="town2" transform="translate(280, 190)">
+              <circle cx="0" cy="0" r="30" fill="url(#townGlow)" class="town-aura"/>
+              <polygon points="0,-36 12,-12 -12,-12" fill="#bfeedd"/>
+              <polygon points="0,-22 18,2 -18,2" fill="#9cd6c4"/>
+              <rect x="-4" y="2" width="8" height="12" fill="#3b2b5f"/>
+              <circle cx="0" cy="-6" r="3" fill="#ffe39a" class="town-window"/>
+              <text x="0" y="30" text-anchor="middle" fill="#bfeedd" font-family="Fredoka" font-size="13" font-weight="600">2. Starfall Glade</text>
+            </g>
+
+            <!-- Town 3: Pillow Peak (Near 520, 360) -->
+            <g class="town-node" id="town3" transform="translate(520, 360)">
+              <circle cx="0" cy="0" r="32" fill="url(#townGlow)" class="town-aura"/>
+              <polygon points="-28,14 0,-28 28,14" fill="#3b1f4a" stroke="#ffe39a" stroke-width="1.5"/>
+              <circle cx="0" cy="-28" r="8" fill="#fff7ee"/>
+              <rect x="-6" y="-4" width="12" height="12" fill="#ffd36b" class="town-window"/>
+              <text x="0" y="32" text-anchor="middle" fill="#ffe39a" font-family="Fredoka" font-size="13" font-weight="600">3. Pillow Peak</text>
+            </g>
+
+            <!-- Town 4: Dewdrop Hollow (Near 760, 160) -->
+            <g class="town-node" id="town4" transform="translate(760, 160)">
+              <circle cx="0" cy="0" r="30" fill="url(#townGlow)" class="town-aura"/>
+              <ellipse cx="0" cy="0" rx="20" ry="14" fill="#2a1f42"/>
+              <path d="M -15 -14 Q 0 -34 15 -14" stroke="#ffc2d4" stroke-width="4" fill="none"/>
+              <circle cx="0" cy="0" r="4" fill="#ffd36b" class="town-window"/>
+              <text x="0" y="28" text-anchor="middle" fill="#ffc2d4" font-family="Fredoka" font-size="13" font-weight="600">4. Dewdrop Hollow</text>
+            </g>
+
+            <!-- Town 5: Sunrise Cove (Near 860, 250) -->
+            <g class="town-node" id="town5" transform="translate(860, 250)">
+              <circle cx="0" cy="0" r="36" fill="url(#townGlow)" class="town-aura"/>
+              <!-- Lighthouse tower -->
+              <polygon points="-12,18 12,18 7,-24 -7,-24" fill="#fff7ee"/>
+              <polygon points="-9,-24 9,-24 0,-36" fill="#ffd36b"/>
+              <circle cx="0" cy="-24" r="5" fill="#ffd36b" class="town-window beacon"/>
+              <text x="0" y="34" text-anchor="middle" fill="#ffd36b" font-family="Fredoka" font-size="13" font-weight="600">5. Sunrise Cove</text>
+            </g>
+
+            <!-- Moving Vessel: Lumo & Glowing Paper Boat -->
+            <g id="travelerGroup" transform="translate(60, 380)">
+              <!-- Lantern Glow -->
+              <circle cx="0" cy="-12" r="24" fill="#ffd36b" opacity="0.45" class="boat-lantern-glow"/>
+              <!-- Folded Paper Boat -->
+              <polygon points="-24,6 24,6 15,20 -15,20" fill="#fff7ee" stroke="#2a2a5e" stroke-width="2"/>
+              <polygon points="0,-16 0,6 18,6" fill="#ffd36b" stroke="#e5b43b" stroke-width="1.5"/>
+              <polygon points="-14,6 0,6 0,-8" fill="#ffc2d4"/>
+              <!-- Mini Baby Lumo sitting inside paper boat -->
+              <ellipse cx="-2" cy="-6" rx="11" ry="8" fill="#fff7ee"/>
+              <circle cx="-2" cy="-5" r="4" fill="#ffd36b" opacity="0.8"/>
+              <circle cx="-4" cy="-7" r="1.5" fill="#2a1e3b"/>
+              <circle cx="2" cy="-7" r="1.5" fill="#2a1e3b"/>
+              <ellipse cx="-7" cy="-5" rx="2" ry="1.2" fill="#ffc2d4"/>
+              <ellipse cx="4" cy="-5" rx="2" ry="1.2" fill="#ffc2d4"/>
+              <!-- Sparkle emission -->
+              <circle cx="-16" cy="12" r="2" fill="#ffe39a" class="wake-sparkle"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Scroll guide indicator -->
+        <div class="map-scroll-hint" aria-hidden="true">
+          <span>↓ Keep scrolling to guide the boat to Sunrise Cove ↓</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SECTION 6: FOOTER - CREDITS, GUESTBOOK & WEBRING
+         Strict Word Count <= 150 words per sub-block
+         ============================================== -->
+    <footer id="footer" class="section footer-section" role="contentinfo" aria-labelledby="footer-title">
+      <div class="container footer-container">
+        <!-- Hit Counter Odometer (Side Quest +1) -->
+        <div class="odometer-panel" aria-label="Dreams Delivered Hit Counter">
+          <div class="odometer-label">DREAMS DELIVERED WORLDWIDE:</div>
+          <div class="odometer-display" id="odometer">
+            <span class="digit-box" data-digit="0">0</span>
+            <span class="digit-box" data-digit="0">0</span>
+            <span class="digit-box" data-digit="1">1</span>
+            <span class="digit-comma">,</span>
+            <span class="digit-box" data-digit="2">2</span>
+            <span class="digit-box" data-digit="0">0</span>
+            <span class="digit-box" data-digit="4">4</span>
+          </div>
+          <div class="odometer-subtext">Each visit wraps a new dream in ribbon and gold foil.</div>
+        </div>
+
+        <!-- Live Interactive Guestbook Wall (Side Quest +2) -->
+        <div class="guestbook-module" id="guestbookSection">
+          <div class="guestbook-header">
+            <h3 id="footer-title" class="module-title">Lumo's Dream Wish Guestbook</h3>
+            <p class="module-subtitle">Leave a gentle bedtime wish or sweet note for the baby moon-cloud. (Max 140 chars)</p>
+          </div>
+
+          <!-- Guestbook Input Form -->
+          <form id="guestbookForm" class="guestbook-form" aria-label="Sign Lumo's Guestbook">
+            <div class="form-inputs">
+              <input type="text" id="signerName" placeholder="Your name (e.g. Star-Gazer Maya)" maxlength="30" required aria-label="Your nickname">
+              <input type="text" id="signerWish" placeholder="Your dream wish for tonight..." maxlength="140" required aria-label="Your dream wish">
+            </div>
+            <div class="form-actions">
+              <span class="char-count" id="charCount">140 chars left</span>
+              <button type="submit" class="retro-btn primary">Pin Note to Cloud 📌</button>
+            </div>
+          </form>
+
+          <!-- Sticky Notes Board -->
+          <div class="sticky-board" id="stickyBoard" role="region" aria-label="Pinned dream wishes">
+            <!-- Dynamically populated from localStorage with pre-seeded items -->
+          </div>
+        </div>
+
+        <!-- Early-Web Webring Bar & Nostalgic Badges -->
+        <div class="webring-panel" aria-label="Early-Web Webring Navigation">
+          <div class="webring-title">✦ THE DREAMLAND WEBRING ✦</div>
+          <div class="webring-links">
+            <button class="webring-btn" id="webringPrev" aria-label="Previous site in Dreamland Webring">« Prev Star</button>
+            <span class="webring-badge">HUB: Baby Web Ring #402</span>
+            <button class="webring-btn" id="webringRandom" aria-label="Random site in Dreamland Webring">✦ Random ✦</button>
+            <button class="webring-btn" id="webringNext" aria-label="Next site in Dreamland Webring">Next Moon »</button>
+          </div>
+        </div>
+
+        <!-- Early-Web Fun Badges Row -->
+        <div class="retro-badges-strip" aria-label="Retro homepage stickers">
+          <span class="retro-sticker">BEST VIEWED ON ANY DEVICE 📱💻</span>
+          <span class="retro-sticker cute-under-construction">🚧 UNDER COZY CONSTRUCTION 🚧</span>
+          <span class="retro-sticker">MADE WITH ♥ AT 3AM</span>
+          <span class="retro-sticker">POWERED BY STARDUST</span>
+        </div>
+
+        <!-- Visible Credits Section (Hard Requirement) -->
+        <div class="credits-box" id="credits">
+          <h4 class="credits-title">Honest Credits & Acknowledgments</h4>
+          <ul class="credits-list">
+            <li><strong>Character & Concept:</strong> Lumo the Baby Moon-Cloud — 100% original creation for the Baby Hackathon.</li>
+            <li><strong>Typography:</strong> Google Fonts — <em>Fredoka</em> (Display by Milena Brandao), <em>Nunito</em> (Body by Vernon Adams), and <em>VT323</em> (Peter Hull).</li>
+            <li><strong>Animation Library:</strong> GSAP 3.12.5 & ScrollTrigger via cdnjs (GreenSock).</li>
+            <li><strong>Audio Synthesis:</strong> Pure in-browser Web Audio API custom oscillators (sine, triangle, pentatonic chime harmonics); zero external sound files used.</li>
+            <li><strong>Art & Graphics:</strong> Hand-coded SVG illustrations, CSS gradients, and responsive layouts crafted by AI pair-programming assistant Antigravity.</li>
+          </ul>
+          <p class="copyright-notice">© 2026 Lumo's Dream Delivery Service. May your pillow always be the cool side.</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Secret Easter Egg Confetti Modal -->
+  <dialog id="secretModal" class="secret-modal" aria-labelledby="secretTitle" aria-modal="true">
+    <div class="secret-card">
+      <span class="secret-stars" aria-hidden="true">✨🌟💫</span>
+      <h3 id="secretTitle">✦ You Found Lumo's Secret! ✦</h3>
+      <p>Congratulations, gentle explorer! You unlocked the <em>Lullaby Master</em> badge. Lumo sends you a golden paper boat filled with sweet slumber.</p>
+      <div class="secret-badge-seal">★ CERTIFIED DREAM DREAMER ★</div>
+      <button class="retro-btn primary" id="closeSecretBtn">Thank You, Lumo! 💛</button>
+    </div>
+  </dialog>
+
+  <!-- Subtle Idle Hint ("psst...") after 30s -->
+  <div class="idle-hint-bubble" id="idleHint" aria-hidden="true">
+    <span class="idle-text">psst... tap the sleeping star in the night sky or click the logo 3 times! ✨</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
