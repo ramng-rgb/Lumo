@@ -5,9 +5,9 @@ A cozy, immersive, hackathon-winning portfolio website for an **100% original ba
 
 ---
 
-## 🌐 Live URL
-- **Live Demo:** `https://lumo-dream-delivery.netlify.app` *(or GitHub Pages)*
-- **Repository:** Local workspace `/babyhack` ready for deployment to GitHub / Netlify / Vercel.
+## 🌐 Live URL & Repository
+- **Production Live URL:** [https://lumos-dream-delivery-service.vercel.app](https://lumos-dream-delivery-service.vercel.app)
+- **GitHub Repository:** [https://github.com/ramng-rgb/Lumo](https://github.com/ramng-rgb/Lumo)
 
 ---
 
