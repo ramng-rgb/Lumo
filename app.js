@@ -865,36 +865,44 @@
     state.deliveredDreamsCount = savedCount ? parseInt(savedCount, 10) + 1 : 1204;
     localStorage.setItem('lumo_dreams_count', state.deliveredDreamsCount);
 
-    renderOdometer(state.deliveredDreamsCount);
+    renderOdometer(state.deliveredDreamsCount, false);
   }
 
   function incrementOdometer() {
     state.deliveredDreamsCount++;
     localStorage.setItem('lumo_dreams_count', state.deliveredDreamsCount);
-    renderOdometer(state.deliveredDreamsCount);
+    renderOdometer(state.deliveredDreamsCount, true);
   }
 
-  function renderOdometer(num) {
+  function renderOdometer(num, animate = true) {
     const formatted = num.toString().padStart(6, '0');
-    // Format: 001,204
     const digits = document.querySelectorAll('.digit-box');
     if (digits.length >= 6) {
-      digits[0].textContent = formatted[0];
-      digits[1].textContent = formatted[1];
-      digits[2].textContent = formatted[2];
-      digits[3].textContent = formatted[3];
-      digits[4].textContent = formatted[4];
-      digits[5].textContent = formatted[5];
+      for (let i = 0; i < 6; i++) {
+        const box = digits[i];
+        if (box.textContent !== formatted[i]) {
+          if (animate) {
+            box.classList.add('rolling');
+            setTimeout(() => {
+              box.textContent = formatted[i];
+              box.classList.remove('rolling');
+            }, 180);
+          } else {
+            box.textContent = formatted[i];
+          }
+        }
+      }
     }
   }
 
-  // 2. Live Guestbook with Pre-seeded Wishes (+2)
+  // 2. Live Guestbook with Pre-seeded Wishes, Rate Limit & Profanity Safety (+2)
   function setupGuestbook() {
     const form = document.getElementById('guestbookForm');
     const signerName = document.getElementById('signerName');
     const signerWish = document.getElementById('signerWish');
     const charCount = document.getElementById('charCount');
     const stickyBoard = document.getElementById('stickyBoard');
+    let lastSubmitTime = 0;
 
     const defaultEntries = [
       { name: "Star-Gazer Maya", wish: "May everyone sleeping under cloudy skies find a sweet moonlit dream tonight!" },
@@ -922,6 +930,17 @@
         '"': '&quot;',
         "'": '&#39;'
       }[m]));
+    }
+
+    // Gentle profanity filter for cozy baby theme
+    function sanitizeProfanity(text) {
+      const forbidden = ['hate', 'ugly', 'stupid', 'bad', 'kill', 'die', 'jerk'];
+      let clean = text;
+      forbidden.forEach(word => {
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        clean = clean.replace(regex, '💛✨');
+      });
+      return clean;
     }
 
     function renderEntries() {
@@ -952,19 +971,30 @@
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = signerName.value.trim();
-      const wish = signerWish.value.trim();
+      const now = Date.now();
+      if (now - lastSubmitTime < 4000) {
+        alert("Patience, sleepy friend! Please wait a moment before sending another dream wish. ✨");
+        return;
+      }
+
+      let name = signerName.value.trim();
+      let wish = signerWish.value.trim();
 
       if (!name || !wish) return;
+
+      name = sanitizeProfanity(name.slice(0, 30));
+      wish = sanitizeProfanity(wish.slice(0, 140));
 
       entries.unshift({ name, wish });
       localStorage.setItem('lumo_guestbook_entries', JSON.stringify(entries));
       renderEntries();
+      lastSubmitTime = now;
 
       signerWish.value = '';
       signerName.value = '';
       charCount.textContent = '140 chars left';
       AudioEngine.playChime(987.77);
+      incrementOdometer();
     });
   }
 
@@ -992,24 +1022,31 @@
       if (btn) {
         btn.addEventListener('click', () => {
           AudioEngine.playClick();
+          const orig = btn.textContent;
           btn.textContent = '✦ Teleporting...';
           setTimeout(() => {
-            btn.textContent = btn.id.includes('Prev') ? '« Prev Star' : btn.id.includes('Random') ? '✦ Random ✦' : 'Next Moon »';
+            btn.textContent = orig;
+            AudioEngine.playChime(784);
           }, 800);
         });
       }
     });
   }
 
-  // 4. Sparkle Cursor Trail (+2)
+  // 4. Sparkle Cursor Trail with rAF Pooling (+2)
   function setupSparkleTrail() {
-    let lastSparkleTime = 0;
+    let mousePos = { x: -100, y: -100 };
+    let hasMoved = false;
+    let frameId = null;
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const sparklePool = [];
+    const MAX_SPARKLES = 20;
 
-    function createSparkle(x, y) {
-      const now = performance.now();
-      if (now - lastSparkleTime < 50) return; // Throttled at ~20fps
-      lastSparkleTime = now;
+    function spawnSparkleAt(x, y) {
+      if (sparklePool.length >= MAX_SPARKLES) {
+        const oldest = sparklePool.shift();
+        if (oldest && oldest.parentNode) oldest.remove();
+      }
 
       const sparkle = document.createElement('span');
       sparkle.className = 'cursor-sparkle';
@@ -1018,22 +1055,41 @@
       sparkle.style.top = `${y}px`;
       sparkle.style.fontSize = `${Math.random() * 10 + 10}px`;
       sparkle.style.color = ['#ffd36b', '#ffe39a', '#ffc2d4', '#bfeedd'][Math.floor(Math.random() * 4)];
-      sparkle.style.setProperty('--sparkle-dx', `${(Math.random() - 0.5) * 30}px`);
-      sparkle.style.setProperty('--sparkle-dy', `${(Math.random() - 0.5) * 30}px`);
+      sparkle.style.setProperty('--sparkle-dx', `${(Math.random() - 0.5) * 35}px`);
+      sparkle.style.setProperty('--sparkle-dy', `${(Math.random() - 0.5) * 35}px`);
 
       document.body.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 750);
+      sparklePool.push(sparkle);
+
+      setTimeout(() => {
+        const idx = sparklePool.indexOf(sparkle);
+        if (idx !== -1) sparklePool.splice(idx, 1);
+        sparkle.remove();
+      }, 700);
+    }
+
+    let lastTime = 0;
+    function renderLoop(time) {
+      if (hasMoved && time - lastTime > 45) { // ~22fps sparkle emission
+        spawnSparkleAt(mousePos.x, mousePos.y);
+        lastTime = time;
+        hasMoved = false;
+      }
+      frameId = requestAnimationFrame(renderLoop);
     }
 
     if (!isTouch) {
       window.addEventListener('mousemove', (e) => {
-        createSparkle(e.clientX, e.clientY);
+        mousePos.x = e.clientX;
+        mousePos.y = e.clientY;
+        hasMoved = true;
       });
+      frameId = requestAnimationFrame(renderLoop);
     } else {
       // Tap sparkles for mobile devices
       window.addEventListener('touchstart', (e) => {
         if (e.touches && e.touches[0]) {
-          createSparkle(e.touches[0].clientX, e.touches[0].clientY);
+          spawnSparkleAt(e.touches[0].clientX, e.touches[0].clientY);
         }
       }, { passive: true });
     }
