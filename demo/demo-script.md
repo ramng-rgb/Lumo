@@ -2,6 +2,7 @@
 
 **Target Duration:** ~75 seconds  
 **Live URL:** https://lumos-dream-delivery-service.vercel.app/  
+**Demo Video (YouTube):** https://youtu.be/00wAaCcoZhc  
 **Source Repository:** https://github.com/ramng-rgb/Lumo  
 
 ---

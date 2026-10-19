@@ -8,7 +8,7 @@ A cozy, immersive, hackathon-winning portfolio website for an **100% original ba
 ## 🌐 Live URL & Repository
 - **Production Live URL:** [https://lumos-dream-delivery-service.vercel.app](https://lumos-dream-delivery-service.vercel.app)
 - **GitHub Repository:** [https://github.com/ramng-rgb/Lumo](https://github.com/ramng-rgb/Lumo)
-- **Demo Video (YouTube / Google Drive):** [https://youtu.be/PLACEHOLDER_DEMO_VIDEO](https://youtu.be/PLACEHOLDER_DEMO_VIDEO) *(Unlisted Demo Walkthrough)*
+- **Demo Video (YouTube Walkthrough):** [https://youtu.be/00wAaCcoZhc](https://youtu.be/00wAaCcoZhc)
 
 
 ---
