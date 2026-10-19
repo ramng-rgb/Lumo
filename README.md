@@ -107,19 +107,33 @@ Open [http://localhost:8080](http://localhost:8080) in your browser.
 
 ## 🚢 Deployment Instructions
 
-### Deploy to Netlify
-1. Go to [app.netlify.com/drop](https://app.netlify.com/drop).
-2. Drag and drop this folder (`babyhack`).
-3. Your site is live instantly!
+### Deploy to Vercel (Recommended)
 
-### Deploy to GitHub Pages
+This project includes a native `vercel.json` configuration for zero-build static deployment:
+
+#### Option 1: Vercel Web Dashboard (Import GitHub Repo)
+1. Go to [vercel.com/new](https://vercel.com/new).
+2. Select your GitHub repository: [ramng-rgb/Lumo](https://github.com/ramng-rgb/Lumo).
+3. Framework Preset: **Other** (Static HTML/CSS/JS, zero build step required).
+4. Click **Deploy**. Your site is live instantly at your Vercel domain!
+
+#### Option 2: Vercel CLI
+```bash
+# Install Vercel CLI (if not already installed)
+npm i -g vercel
+
+# Deploy directly to production
+vercel --prod
+```
+
+### Deploy to GitHub Pages (Alternative)
 1. Push to your GitHub repository:
    ```bash
-   git remote add origin https://github.com/<your-username>/lumo-dream-delivery.git
-   git branch -M main
-   git push -u origin main
+   git push origin main
    ```
-2. In GitHub repository settings, navigate to **Pages** > **Source: Deploy from branch `main`**.
+2. In your GitHub repository settings, navigate to **Settings** > **Pages** > **Build and deployment**.
+3. Under **Source**, select **Deploy from a branch** and choose `main` / `/ (root)`.
+
 
 ---
 
